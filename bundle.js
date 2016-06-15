@@ -48,12 +48,15 @@
 	var ctx = canvas.getContext("2d");
 
 	var Ball = __webpack_require__(1);
+	var Paddle = __webpack_require__(3);
 
 	var ball = new Ball(canvas, ctx);
+	var paddle = new Paddle(canvas, ctx);
 
 	var render = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
 	  ball.render();
+	  paddle.render();
 	};
 
 
@@ -149,6 +152,40 @@
 	}
 
 	module.exports = Entity;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+
+	function Paddle(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+
+	  this.height = 10;
+	  this.width= 75;
+	  this.x = (canvas.width - this.width)/2;
+
+	  this.color = "#FFFFFF";
+	}
+
+	Paddle.prototype = new Entity();
+	Paddle.prototype.constructor = Paddle;
+
+	Paddle.prototype.render = function() {
+	  this.ctx.beginPath();
+	  this.ctx.rect(
+	    this.x,
+	    this.canvas.height - this.height - 10,
+	    this.width,
+	    this.height);
+	  this.ctx.fillStyle = this.color = "#FFFFFF";
+	  this.ctx.fill();
+	  this.ctx.closePath();
+	};
+
+	module.exports = Paddle;
 
 
 /***/ }

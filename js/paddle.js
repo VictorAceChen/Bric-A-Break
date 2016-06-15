@@ -17,7 +17,7 @@ Paddle.prototype.render = function() {
   this.ctx.beginPath();
   this.ctx.rect(
     this.x,
-    canvas.height - this.height,
+    this.canvas.height - this.height - 10,
     this.width,
     this.height);
   this.ctx.fillStyle = this.color = "#FFFFFF";
