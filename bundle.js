@@ -44,14 +44,17 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var canvas = document.getElementById("myCanvas");
-	var ctx = canvas.getContext("2d");
-
 	var Ball = __webpack_require__(1);
 	var Paddle = __webpack_require__(3);
 
-	var ball = new Ball(canvas, ctx);
+	var canvas = document.getElementById("myCanvas");
+	var ctx = canvas.getContext("2d");
+	var Controller = __webpack_require__(4);
+
+
 	var paddle = new Paddle(canvas, ctx);
+	var controller = new Controller(paddle);
+	var ball = new Ball(canvas, ctx);
 
 	var render = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -186,6 +189,26 @@
 	};
 
 	module.exports = Paddle;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	function Controller(paddle) {
+
+	  document.addEventListener("keydown", keyDownHandler, false);
+
+	  function keyDownHandler(e) {
+	      if(e.keyCode == 39) {
+	        paddle.x += 7;
+	      }
+	      else if(e.keyCode == 37) {
+	        paddle.x -= 7;
+	      }
+	  }
+	}
+	module.exports = Controller;
 
 
 /***/ }
