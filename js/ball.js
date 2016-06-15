@@ -1,8 +1,5 @@
 var Entity = require("./entity.js");
 
-// inherit constructor
-Ball.prototype = new Entity();
-Ball.prototype.constructor = Ball;
 
 function Ball(canvas, ctx) {
   Entity.call(this, canvas, ctx);
@@ -12,6 +9,10 @@ function Ball(canvas, ctx) {
   this.radius = 10;
   this.color = "#FFFFFF";
 }
+
+// inherit constructor
+Ball.prototype = new Entity();
+Ball.prototype.constructor = Ball;
 
 Ball.prototype.setPosition = function(x, y) {
   this.x = x || this.x;
