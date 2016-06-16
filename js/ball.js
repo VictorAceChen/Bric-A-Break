@@ -23,19 +23,19 @@ Ball.prototype.setVelocity = function(dx, dy) {
   this.dy = dy || this.dy;
 };
 
-Ball.prototype.leftEdge = function() {
+Ball.prototype.getLeftEdge = function() {
   return this.x + this.dx;
 };
 
-Ball.prototype.topEdge = function() {
+Ball.prototype.getTopEdge = function() {
   return this.y + this.dy;
 };
 
-Ball.prototype.rightEdge = function() {
+Ball.prototype.getRightEdge = function() {
   return this.x + this.dx + this.radius;
 };
 
-Ball.prototype.bottomEdge = function() {
+Ball.prototype.getBottomEdge = function() {
   return this.y + this.dy + this.radius;
 };
 
@@ -49,13 +49,13 @@ Ball.prototype.shiftHorizontal = function() {
 
 Ball.prototype.bounce = function() {
   // bounce off top or bottom
-  if(this.bottomEdge() > this.canvas.height ||
-    this.topEdge() < 0) {
+  if(this.getBottomEdge() > this.canvas.height ||
+    this.getTopEdge() < 0) {
   this.shiftVertical();
   }
   // bounce off left or right
-  if(this.rightEdge() > this.canvas.width ||
-    this.leftEdge() < 0) {
+  if(this.getRightEdge() > this.canvas.width ||
+    this.getLeftEdge() < 0) {
       this.shiftHorizontal();
   }
 };

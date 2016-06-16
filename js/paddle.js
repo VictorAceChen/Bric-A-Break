@@ -6,7 +6,7 @@ function Paddle(canvas, ctx) {
   this.height = 10;
   this.width= 110;
   this.x = (canvas.width - this.width)/2;
-
+  this.y = this.canvas.height - this.height - 20;
   this.color = "#FFFFFF";
 }
 
@@ -15,19 +15,26 @@ Paddle.prototype.constructor = Paddle;
 
 Paddle.prototype.moveLeft = function() {
   if (this.x + this.width > this.canvas.width) return; //don't cross wall
-  this.x += 5;
+  this.x += 10;
 };
 
 Paddle.prototype.moveRight = function() {
     if (this.x < 0) return; //don't cross wall
-    this.x -= 5;
+    this.x -= 10;
+};
+
+Paddle.prototype.isHit = function(ball) {
+  return ball.x > this.x &&
+    ball.x < this.x + this.width &&
+    ball.y > this.y &&
+    ball.y < this.y + this.height;
 };
 
 Paddle.prototype.render = function() {
   this.ctx.beginPath();
   this.ctx.rect(
     this.x,
-    this.canvas.height - this.height - 10,
+    this.y,
     this.width,
     this.height);
   this.ctx.fillStyle = this.color = "#FFFFFF";

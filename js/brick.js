@@ -5,8 +5,8 @@ function Brick(canvas, ctx) {
 
   this.x = 0;
   this.y = 0;
-  this.width = 75;
-  this.height = 25;
+  this.width = 65;
+  this.height = 15;
 }
 
 // inherit constructor
@@ -34,6 +34,14 @@ Brick.prototype.getRightEdge = function() {
 Brick.prototype.getBottomEdge = function() {
   return this.y + this.height;
 };
+
+Brick.prototype.isHit = function(ball) {
+  return ball.x > this.x &&
+    ball.x < this.x + this.width &&
+    ball.y > this.y &&
+    ball.y < this.y + this.height;
+};
+
 
 Brick.prototype.render = function () {
   var ctx = this.ctx;

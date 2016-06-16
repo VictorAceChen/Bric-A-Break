@@ -16,7 +16,8 @@ var cDetection = new CollisionDetection(ball, bricks, paddle);
 
 var render = function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  cDetection.check();
+  cDetection.checkBricks();
+  cDetection.checkPaddle();
   ball.render();
   paddle.render();
   bricks.render();
