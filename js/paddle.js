@@ -15,12 +15,12 @@ Paddle.prototype.constructor = Paddle;
 
 Paddle.prototype.moveLeft = function() {
   if (this.x + this.width > this.canvas.width) return;
-  this.x += 7;
+  this.x += 5;
 };
 
 Paddle.prototype.moveRight = function() {
     if (this.x < 0) return;
-    this.x -= 7;
+    this.x -= 5;
 };
 
 Paddle.prototype.render = function() {

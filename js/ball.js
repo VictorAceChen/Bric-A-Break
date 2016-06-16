@@ -1,6 +1,5 @@
 var Entity = require("./entity.js");
 
-
 function Ball(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 

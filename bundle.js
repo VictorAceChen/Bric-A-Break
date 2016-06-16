@@ -46,6 +46,7 @@
 
 	var Ball = __webpack_require__(1);
 	var Paddle = __webpack_require__(3);
+	var Bricks = __webpack_require__(5);
 
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
@@ -55,11 +56,13 @@
 	var paddle = new Paddle(canvas, ctx);
 	var controller = new Controller(paddle);
 	var ball = new Ball(canvas, ctx);
+	var bricks = new Bricks(canvas, ctx);
 
 	var render = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
 	  ball.render();
 	  paddle.render();
+	  bricks.render();
 	};
 
 
@@ -71,7 +74,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
-
 
 	function Ball(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
@@ -178,12 +180,12 @@
 
 	Paddle.prototype.moveLeft = function() {
 	  if (this.x + this.width > this.canvas.width) return;
-	  this.x += 7;
+	  this.x += 5;
 	};
 
 	Paddle.prototype.moveRight = function() {
 	    if (this.x < 0) return;
-	    this.x -= 7;
+	    this.x -= 5;
 	};
 
 	Paddle.prototype.render = function() {
@@ -220,6 +222,58 @@
 	  }
 	}
 	module.exports = Controller;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+
+	function Bricks(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+
+	  this.brickRowCount = 3;
+	  this.brickColumnCount = 5;
+	  this.brickWidth = 75;
+	  this.brickHeight = 25;
+	  this.brickPadding = 10;
+	  this.brickOffsetTop = 30;
+	  this.brickOffsetLeft = 30;
+
+	  this.bricks = [];
+	  for(c = 0; c < this.brickColumnCount; c++) {
+	      this.bricks[c] = [];
+	      for(r = 0; r < this.brickRowCount; r++) {
+	          this.bricks[c][r] = { x: 0, y: 0 };
+	      }
+	  }
+
+	}
+
+	// inherit constructor
+	Bricks.prototype = new Entity();
+	Bricks.prototype.constructor = Bricks;
+
+	Bricks.prototype.render = function () {
+	  var ctx = this.ctx;
+	    for(c=0; c<this.brickColumnCount; c++) {
+	        for(r=0; r<this.brickRowCount; r++) {
+	            this.brickX = (c*(this.brickWidth+this.brickPadding))+this.brickOffsetLeft;
+	            this.brickY = (r*(this.brickHeight+this.brickPadding))+this.brickOffsetTop;
+	            this.bricks[c][r].x = this.brickX;
+	            this.bricks[c][r].y = this.brickY;
+	            ctx.beginPath();
+	            ctx.rect(this.brickX, this.brickY, this.brickWidth, this.brickHeight);
+	            ctx.fillStyle = "#FFFFFF";
+	            ctx.fill();
+	            ctx.closePath();
+	        }
+	    }
+	};
+
+
+	module.exports = Bricks;
 
 
 /***/ }
