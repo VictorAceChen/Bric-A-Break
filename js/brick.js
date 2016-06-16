@@ -1,6 +1,6 @@
 var Entity = require("./entity.js");
 
-function Bricks(canvas, ctx) {
+function Brick(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 
   this.x = 0;
@@ -10,15 +10,32 @@ function Bricks(canvas, ctx) {
 }
 
 // inherit constructor
-Bricks.prototype = new Entity();
-Bricks.prototype.constructor = Bricks;
+Brick.prototype = new Entity();
+Brick.prototype.constructor = Brick;
 
-Bricks.prototype.setPosition = function (x, y) {
+Brick.prototype.setPosition = function (x, y) {
   this.x = x;
   this.y = y;
 };
 
-Bricks.prototype.render = function () {
+
+Brick.prototype.getLeftEdge = function() {
+  return this.x - this.width;
+};
+
+Brick.prototype.getTopEdge = function() {
+  return this.y - this.height;
+};
+
+Brick.prototype.getRightEdge = function() {
+  return this.x + this.width;
+};
+
+Brick.prototype.getBottomEdge = function() {
+  return this.y + this.height;
+};
+
+Brick.prototype.render = function () {
   var ctx = this.ctx;
   ctx.beginPath();
   ctx.rect(this.x, this.y, this.width, this.height);
@@ -28,4 +45,4 @@ Bricks.prototype.render = function () {
 };
 
 
-module.exports = Bricks;
+module.exports = Brick;

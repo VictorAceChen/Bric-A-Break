@@ -47,20 +47,22 @@
 	var Ball = __webpack_require__(1);
 	var Paddle = __webpack_require__(3);
 	var Bricks = __webpack_require__(6);
+	var CollisionDetection = __webpack_require__(7);
 
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
 	var Controller = __webpack_require__(5);
 
-
 	var paddle = new Paddle(canvas, ctx);
 	var controller = new Controller(paddle);
 	var ball = new Ball(canvas, ctx);
 	var bricks = new Bricks(canvas, ctx);
-	var brick = new Brick(canvas, ctx);
+
+	var cDetection = new CollisionDetection(ball, bricks, paddle);
 
 	var render = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
+	  cDetection.check();
 	  ball.render();
 	  paddle.render();
 	  bricks.render();
@@ -115,16 +117,24 @@
 	  return this.y + this.dy + this.radius;
 	};
 
+	Ball.prototype.shiftVertical = function() {
+	  this.dy = -this.dy;
+	};
+
+	Ball.prototype.shiftHorizontal = function() {
+	  this.dx = -this.dx;
+	};
+
 	Ball.prototype.bounce = function() {
 	  // bounce off top or bottom
 	  if(this.bottomEdge() > this.canvas.height ||
 	    this.topEdge() < 0) {
-	  this.dy = -this.dy;
+	  this.shiftVertical();
 	  }
 	  // bounce off left or right
 	  if(this.rightEdge() > this.canvas.width ||
 	    this.leftEdge() < 0) {
-	      this.dx = -this.dx;
+	      this.shiftHorizontal();
 	  }
 	};
 
@@ -210,7 +220,7 @@
 
 	var Entity = __webpack_require__(2);
 
-	function Bricks(canvas, ctx) {
+	function Brick(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 
 	  this.x = 0;
@@ -220,15 +230,32 @@
 	}
 
 	// inherit constructor
-	Bricks.prototype = new Entity();
-	Bricks.prototype.constructor = Bricks;
+	Brick.prototype = new Entity();
+	Brick.prototype.constructor = Brick;
 
-	Bricks.prototype.setPosition = function (x, y) {
+	Brick.prototype.setPosition = function (x, y) {
 	  this.x = x;
 	  this.y = y;
 	};
 
-	Bricks.prototype.render = function () {
+
+	Brick.prototype.getLeftEdge = function() {
+	  return this.x - this.width;
+	};
+
+	Brick.prototype.getTopEdge = function() {
+	  return this.y - this.height;
+	};
+
+	Brick.prototype.getRightEdge = function() {
+	  return this.x + this.width;
+	};
+
+	Brick.prototype.getBottomEdge = function() {
+	  return this.y + this.height;
+	};
+
+	Brick.prototype.render = function () {
 	  var ctx = this.ctx;
 	  ctx.beginPath();
 	  ctx.rect(this.x, this.y, this.width, this.height);
@@ -238,7 +265,7 @@
 	};
 
 
-	module.exports = Bricks;
+	module.exports = Brick;
 
 
 /***/ },
@@ -272,16 +299,14 @@
 	function Bricks(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 
-	  this.bricks = [];
 	  this.rows = 3;
-	  this.column = 5;
-	  this.brickWidth = 75;
-	  this.brickHeight = 25;
+	  this.columns = 5;
 	  this.padding = 10;
 	  this.topMargin = 30;
 	  this.leftMargin = 30;
+	  this.list = [];
 
-	  for(i = 0; i < this.column; i++) {
+	  for(i = 0; i < this.columns; i++) {
 	      var row = [];
 	      for(j = 0; j < this.rows; j++) {
 	        var brick = new Brick(canvas, ctx);
@@ -290,7 +315,7 @@
 	        brick.setPosition(x,y);
 	        row.push(brick);
 	      }
-	      this.bricks.push(row);
+	      this.list.push(row);
 	  }
 	}
 
@@ -299,15 +324,61 @@
 	Bricks.prototype.constructor = Bricks;
 
 	Bricks.prototype.render = function () {
-	    for(i = 0; i < this.column; i++) {
-	        for(j = 0; j < this.rows; j++) {
-	            this.bricks[i][j].render();
-	        }
-	    }
+	    this.list.forEach(function(row){
+	      row.forEach(function(brick){
+	        brick.render();
+	      });
+	    }); 
 	};
 
 
 	module.exports = Bricks;
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	function CollisionDetection(ball, bricks, paddle) {
+	  this.ball = ball;
+	  this.bricks = bricks;
+	  this.paddle = paddle;
+	}
+
+
+	CollisionDetection.prototype.check = function() {
+	  var ball = this.ball;
+	  var bricks = this.bricks;
+	  var paddle = this.paddle;
+
+	  bricks.list.forEach(function(row){
+	    row.forEach(function(brick, index){
+	      if(ball.x > brick.x &&
+	        ball.x < brick.x+brick.width &&
+	        ball.y > brick.y &&
+	        ball.y < brick.y+brick.height) {
+	          ball.shiftVertical();
+	          row.splice(index, 1);
+	          return;
+	      }
+	    });
+	  });
+	  // for(i = 0; i < bricks.columns; i++) {
+	  //     for(j = 0; j< bricks.rows; j++) {
+	  //         var brick = bricks.list[i][j];
+	  //         if(ball.x > brick.x &&
+	  //           ball.x < brick.x+brick.width &&
+	  //           ball.y > brick.y &&
+	  //           ball.y < brick.y+brick.height) {
+	  //             ball.shiftVertical();
+	  //             // bricks.list[i].splice(j);
+	  //             return;
+	  //         }
+	  //     }
+	  // }
+	};
+
+	module.exports = CollisionDetection;
 
 
 /***/ }

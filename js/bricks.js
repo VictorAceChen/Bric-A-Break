@@ -4,16 +4,14 @@ var Brick = require("./brick.js");
 function Bricks(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 
-  this.bricks = [];
   this.rows = 3;
-  this.column = 5;
-  this.brickWidth = 75;
-  this.brickHeight = 25;
+  this.columns = 5;
   this.padding = 10;
   this.topMargin = 30;
   this.leftMargin = 30;
+  this.list = [];
 
-  for(i = 0; i < this.column; i++) {
+  for(i = 0; i < this.columns; i++) {
       var row = [];
       for(j = 0; j < this.rows; j++) {
         var brick = new Brick(canvas, ctx);
@@ -22,7 +20,7 @@ function Bricks(canvas, ctx) {
         brick.setPosition(x,y);
         row.push(brick);
       }
-      this.bricks.push(row);
+      this.list.push(row);
   }
 }
 
@@ -31,11 +29,11 @@ Bricks.prototype = new Entity();
 Bricks.prototype.constructor = Bricks;
 
 Bricks.prototype.render = function () {
-    for(i = 0; i < this.column; i++) {
-        for(j = 0; j < this.rows; j++) {
-            this.bricks[i][j].render();
-        }
-    }
+    this.list.forEach(function(row){
+      row.forEach(function(brick){
+        brick.render();
+      });
+    }); 
 };
 
 

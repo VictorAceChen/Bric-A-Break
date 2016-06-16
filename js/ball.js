@@ -39,16 +39,24 @@ Ball.prototype.bottomEdge = function() {
   return this.y + this.dy + this.radius;
 };
 
+Ball.prototype.shiftVertical = function() {
+  this.dy = -this.dy;
+};
+
+Ball.prototype.shiftHorizontal = function() {
+  this.dx = -this.dx;
+};
+
 Ball.prototype.bounce = function() {
   // bounce off top or bottom
   if(this.bottomEdge() > this.canvas.height ||
     this.topEdge() < 0) {
-  this.dy = -this.dy;
+  this.shiftVertical();
   }
   // bounce off left or right
   if(this.rightEdge() > this.canvas.width ||
     this.leftEdge() < 0) {
-      this.dx = -this.dx;
+      this.shiftHorizontal();
   }
 };
 
