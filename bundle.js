@@ -46,17 +46,18 @@
 
 	var Ball = __webpack_require__(1);
 	var Paddle = __webpack_require__(3);
-	var Bricks = __webpack_require__(5);
+	var Bricks = __webpack_require__(6);
 
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
-	var Controller = __webpack_require__(4);
+	var Controller = __webpack_require__(5);
 
 
 	var paddle = new Paddle(canvas, ctx);
 	var controller = new Controller(paddle);
 	var ball = new Ball(canvas, ctx);
 	var bricks = new Bricks(canvas, ctx);
+	var brick = new Brick(canvas, ctx);
 
 	var render = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -179,12 +180,12 @@
 	Paddle.prototype.constructor = Paddle;
 
 	Paddle.prototype.moveLeft = function() {
-	  if (this.x + this.width > this.canvas.width) return;
+	  if (this.x + this.width > this.canvas.width) return; //don't cross wall
 	  this.x += 5;
 	};
 
 	Paddle.prototype.moveRight = function() {
-	    if (this.x < 0) return;
+	    if (this.x < 0) return; //don't cross wall
 	    this.x -= 5;
 	};
 
@@ -205,6 +206,43 @@
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+
+	function Bricks(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+
+	  this.x = 0;
+	  this.y = 0;
+	  this.width = 75;
+	  this.height = 25;
+	}
+
+	// inherit constructor
+	Bricks.prototype = new Entity();
+	Bricks.prototype.constructor = Bricks;
+
+	Bricks.prototype.setPosition = function (x, y) {
+	  this.x = x;
+	  this.y = y;
+	};
+
+	Bricks.prototype.render = function () {
+	  var ctx = this.ctx;
+	  ctx.beginPath();
+	  ctx.rect(this.x, this.y, this.width, this.height);
+	  ctx.fillStyle = "#FFFFFF";
+	  ctx.fill();
+	  ctx.closePath();
+	};
+
+
+	module.exports = Bricks;
+
+
+/***/ },
+/* 5 */
 /***/ function(module, exports) {
 
 	function Controller(paddle) {
@@ -225,30 +263,35 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
+	var Brick = __webpack_require__(4);
 
 	function Bricks(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 
-	  this.brickRowCount = 3;
-	  this.brickColumnCount = 5;
+	  this.bricks = [];
+	  this.rows = 3;
+	  this.column = 5;
 	  this.brickWidth = 75;
 	  this.brickHeight = 25;
-	  this.brickPadding = 10;
-	  this.brickOffsetTop = 30;
-	  this.brickOffsetLeft = 30;
+	  this.padding = 10;
+	  this.topMargin = 30;
+	  this.leftMargin = 30;
 
-	  this.bricks = [];
-	  for(c = 0; c < this.brickColumnCount; c++) {
-	      this.bricks[c] = [];
-	      for(r = 0; r < this.brickRowCount; r++) {
-	          this.bricks[c][r] = { x: 0, y: 0 };
+	  for(i = 0; i < this.column; i++) {
+	      var row = [];
+	      for(j = 0; j < this.rows; j++) {
+	        var brick = new Brick(canvas, ctx);
+	        var x = (i*(brick.width+this.padding))+this.leftMargin;
+	        var y = (j*(brick.height+this.padding))+this.topMargin;
+	        brick.setPosition(x,y);
+	        row.push(brick);
 	      }
+	      this.bricks.push(row);
 	  }
-
 	}
 
 	// inherit constructor
@@ -256,18 +299,9 @@
 	Bricks.prototype.constructor = Bricks;
 
 	Bricks.prototype.render = function () {
-	  var ctx = this.ctx;
-	    for(c=0; c<this.brickColumnCount; c++) {
-	        for(r=0; r<this.brickRowCount; r++) {
-	            this.brickX = (c*(this.brickWidth+this.brickPadding))+this.brickOffsetLeft;
-	            this.brickY = (r*(this.brickHeight+this.brickPadding))+this.brickOffsetTop;
-	            this.bricks[c][r].x = this.brickX;
-	            this.bricks[c][r].y = this.brickY;
-	            ctx.beginPath();
-	            ctx.rect(this.brickX, this.brickY, this.brickWidth, this.brickHeight);
-	            ctx.fillStyle = "#FFFFFF";
-	            ctx.fill();
-	            ctx.closePath();
+	    for(i = 0; i < this.column; i++) {
+	        for(j = 0; j < this.rows; j++) {
+	            this.bricks[i][j].render();
 	        }
 	    }
 	};

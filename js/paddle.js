@@ -14,12 +14,12 @@ Paddle.prototype = new Entity();
 Paddle.prototype.constructor = Paddle;
 
 Paddle.prototype.moveLeft = function() {
-  if (this.x + this.width > this.canvas.width) return;
+  if (this.x + this.width > this.canvas.width) return; //don't cross wall
   this.x += 5;
 };
 
 Paddle.prototype.moveRight = function() {
-    if (this.x < 0) return;
+    if (this.x < 0) return; //don't cross wall
     this.x -= 5;
 };
 
