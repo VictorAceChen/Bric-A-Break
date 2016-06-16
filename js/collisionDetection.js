@@ -13,10 +13,9 @@ CollisionDetection.prototype.checkBricks = function() {
     row.forEach(function(brick, index){
       if(brick.isHit(ball)) {
 
-            ball.shiftVertical();
-            // ball.shiftHorizontal();
-
-          row.splice(index, 1);
+          ball.shiftVertical();
+          brick.weaken();
+          if (brick.isDead()) row.splice(index, 1);
       }
     });
   });
@@ -27,8 +26,7 @@ CollisionDetection.prototype.checkPaddle = function() {
   var paddle = this.paddle;
 
       if(paddle.isHit(ball)) {
-            //needs
-            ball.shiftVertical();
+            ball.dy = -Math.abs(ball.dy);
       }
 };
 

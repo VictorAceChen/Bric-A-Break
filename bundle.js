@@ -228,6 +228,16 @@
 
 	var Entity = __webpack_require__(2);
 
+	STRENGTH_DISPLAY = {
+	1: "#FF0000",
+	2: "#FFA500",
+	3: "#FFFF00",
+	4: "#008000",
+	5: "#0000FF",
+	6: "#800080",
+	7: "#A9A9A9"
+	};
+
 	function Brick(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 
@@ -235,6 +245,7 @@
 	  this.y = 0;
 	  this.width = 65;
 	  this.height = 15;
+	  this.strength = 1;
 	}
 
 	// inherit constructor
@@ -246,6 +257,17 @@
 	  this.y = y;
 	};
 
+	Brick.prototype.setStrength = function (value) {
+	  this.strength = value;
+	};
+
+	Brick.prototype.weaken = function () {
+	  this.strength -= 1;
+	};
+
+	Brick.prototype.isDead = function () {
+	  return this.strength < 1;
+	};
 
 	Brick.prototype.getLeftEdge = function() {
 	  return this.x - this.width;
@@ -275,7 +297,7 @@
 	  var ctx = this.ctx;
 	  ctx.beginPath();
 	  ctx.rect(this.x, this.y, this.width, this.height);
-	  ctx.fillStyle = "#FFFFFF";
+	  ctx.fillStyle = STRENGTH_DISPLAY[this.strength];
 	  ctx.fill();
 	  ctx.closePath();
 	};
@@ -294,12 +316,21 @@
 
 	  function keyDownHandler(e) {
 	    e.preventDefault();
-	    if(e.keyCode == 39) {
+
+	    switch(e.keyCode) {
+	    case 39:
 	      paddle.moveLeft();
-	    }
-	    else if(e.keyCode == 37) {
+	        break;
+	    case 65:
+	      paddle.moveLeft();
+	        break;
+	    case 37:
 	      paddle.moveRight();
-	    }
+	        break;
+	    case 68:
+	      paddle.moveRight();
+	        break;
+	        }
 	  }
 	}
 	module.exports = Controller;
@@ -315,11 +346,15 @@
 	function Bricks(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 
-	  this.rows = 4;
-	  this.columns = 6;
-	  this.padding = 10;
-	  this.topMargin = 30;
-	  this.leftMargin = 30;
+	  this.rows = 7;
+	  this.columns = 7;
+	  this.padding = 0;
+	  this.topMargin = 0;
+	  this.leftMargin = 20;
+	  // this.columns = 6;
+	  // this.padding = 10;
+	  // this.topMargin = 30;
+	  // this.leftMargin = 30;
 	  this.list = [];
 
 	  for(i = 0; i < this.columns; i++) {
@@ -329,6 +364,7 @@
 	        var x = (i * (brick.width + this.padding)) + this.leftMargin;
 	        var y = (j*(brick.height + this.padding)) + this.topMargin;
 	        brick.setPosition(x,y);
+	        brick.setStrength(7 - j);
 	        row.push(brick);
 	      }
 	      this.list.push(row);
@@ -370,10 +406,9 @@
 	    row.forEach(function(brick, index){
 	      if(brick.isHit(ball)) {
 
-	            ball.shiftVertical();
-	            // ball.shiftHorizontal();
-
-	          row.splice(index, 1);
+	          ball.shiftVertical();
+	          brick.weaken();
+	          if (brick.isDead()) row.splice(index, 1);
 	      }
 	    });
 	  });
@@ -384,8 +419,7 @@
 	  var paddle = this.paddle;
 
 	      if(paddle.isHit(ball)) {
-	            //needs
-	            ball.shiftVertical();
+	            ball.dy = -Math.abs(ball.dy);
 	      }
 	};
 

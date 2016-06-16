@@ -4,12 +4,21 @@ function Controller(paddle) {
 
   function keyDownHandler(e) {
     e.preventDefault();
-    if(e.keyCode == 39) {
+
+    switch(e.keyCode) {
+    case 39:
       paddle.moveLeft();
-    }
-    else if(e.keyCode == 37) {
+        break;
+    case 65:
+      paddle.moveLeft();
+        break;
+    case 37:
       paddle.moveRight();
-    }
+        break;
+    case 68:
+      paddle.moveRight();
+        break;
+        }
   }
 }
 module.exports = Controller;
