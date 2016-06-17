@@ -59,4 +59,8 @@ CollisionDetection.prototype.isRectOverlap = function(rect, point) {
     point.y < rect.y + rect.height;
 };
 
+
+
+
+
 module.exports = CollisionDetection;
