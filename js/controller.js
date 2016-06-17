@@ -24,7 +24,7 @@ function Controller(paddle,canvas) {
 
   function mouseMoveHandler(e) {
     var relativeX = e.clientX - canvas.offsetLeft;
-    if(relativeX > 0 && relativeX < canvas.width) {
+    if(relativeX > 0 && relativeX < canvas.width - paddle.width) {
         paddle.setPosition(relativeX);
     }
   }

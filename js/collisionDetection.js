@@ -48,7 +48,20 @@ CollisionDetection.prototype.checkPaddle = function() {
   var paddle = this.paddle;
 
       if(paddle.isHit(ball)) {
-            ball.dy = -Math.abs(ball.dy); //always go up
+        var ballPos = ball.x - paddle.x;
+
+        if(ball.x < paddle.x + paddle.width/9){
+            ball.setVelocity(-4.2,-0.75);
+        }else if(ball.x < paddle.x + (paddle.width/9 * 4)){
+            ball.setVelocity(-2,-2);
+        }else if(ball.x < paddle.x + (paddle.width/9 * 5)){
+            ball.setVelocity(0,-2);
+        }else if(ball.x < paddle.x + (paddle.width/9 * 8)){
+            ball.setVelocity(2,-2);
+        }else if(ball.x < paddle.x + paddle.width){
+            ball.setVelocity(4.2,-0.75);
+        }
+
       }
 };
 

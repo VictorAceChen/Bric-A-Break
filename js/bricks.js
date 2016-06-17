@@ -6,7 +6,7 @@ function Bricks(canvas, ctx) {
 
   this.rows = 7;
   this.columns = 7;
-  this.padding = 0;
+  this.padding = 1;
   this.topMargin = 0;
   this.leftMargin = 20;
   // this.columns = 6;

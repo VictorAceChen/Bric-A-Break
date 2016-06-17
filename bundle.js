@@ -51,6 +51,7 @@
 	var CollisionDetection = __webpack_require__(6);
 	var Status = __webpack_require__(7);
 	var Controller = __webpack_require__(8);
+	var Prize = __webpack_require__(9);
 	
 	// set canvas base
 	var canvas = document.getElementById("myCanvas");
@@ -63,8 +64,11 @@
 	var bricks = new Bricks(canvas, ctx);
 	var status = new Status(canvas, ctx);
 	var collisionDetection = new CollisionDetection(ball, bricks, paddle, status);
+	var prize = new Prize(canvas, ctx);
+	prize.setType("grow");
 	
-	var render = function(){
+	
+	var play = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
 	  collisionDetection.checkBricks();
 	  collisionDetection.checkPaddle();
@@ -72,10 +76,26 @@
 	  paddle.render();
 	  bricks.render();
 	  status.render();
+	  // prize.render();
 	};
 	
+	var gameover = function () {
+	  this.img = new Image();   // Create new img element
+	  this.img.src = ""; // Set source path
+	  ctx.drawImage(this.img,0,0);
+	  ctx.beginPath();
+	  ctx.moveTo(30,96);
+	  ctx.lineTo(70,66);
+	  ctx.lineTo(103,76);
+	  ctx.lineTo(170,15);
+	  ctx.stroke();
+	};
 	
-	setInterval(render, 10);
+	var run = function(){
+	
+	};
+	
+	  setInterval(play, 10);
 
 
 /***/ },
@@ -87,7 +107,7 @@
 	function Ball(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	
-	  this.setPosition(this.canvas.width/2, this.canvas.height-30);
+	  this.setPosition(this.canvas.width/2, this.canvas.height-75);
 	  this.setVelocity(2, -2);
 	  this.radius = 7;
 	  this.color = "#FFFFFF";
@@ -98,13 +118,13 @@
 	Ball.prototype.constructor = Ball;
 	
 	Ball.prototype.setPosition = function(x, y) {
-	  this.x = x || this.x;
-	  this.y = y || this.y;
+	  this.x = x;
+	  this.y = y;
 	};
 	
 	Ball.prototype.setVelocity = function(dx, dy) {
-	  this.dx = dx || this.dx;
-	  this.dy = dy || this.dy;
+	  this.dx = dx;
+	  this.dy = dy;
 	};
 	
 	Ball.prototype.getLeftEdge = function() {
@@ -189,8 +209,8 @@
 	function Paddle(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	
-	  this.height = 10;
-	  this.width= 110;
+	  this.height = 15;
+	  this.width= 120;
 	  this.x = (canvas.width - this.width)/2;
 	  this.y = canvas.height - this.height - 20;
 	  this.color = "#FFFFFF";
@@ -251,7 +271,7 @@
 	
 	  this.rows = 7;
 	  this.columns = 7;
-	  this.padding = 0;
+	  this.padding = 1;
 	  this.topMargin = 0;
 	  this.leftMargin = 20;
 	  // this.columns = 6;
@@ -428,7 +448,20 @@
 	  var paddle = this.paddle;
 	
 	      if(paddle.isHit(ball)) {
-	            ball.dy = -Math.abs(ball.dy); //always go up
+	        var ballPos = ball.x - paddle.x;
+	
+	        if(ball.x < paddle.x + paddle.width/9){
+	            ball.setVelocity(-4.2,-0.75);
+	        }else if(ball.x < paddle.x + (paddle.width/9 * 4)){
+	            ball.setVelocity(-2,-2);
+	        }else if(ball.x < paddle.x + (paddle.width/9 * 5)){
+	            ball.setVelocity(0,-2);
+	        }else if(ball.x < paddle.x + (paddle.width/9 * 8)){
+	            ball.setVelocity(2,-2);
+	        }else if(ball.x < paddle.x + paddle.width){
+	            ball.setVelocity(4.2,-0.75);
+	        }
+	
 	      }
 	};
 	
@@ -510,12 +543,60 @@
 	
 	  function mouseMoveHandler(e) {
 	    var relativeX = e.clientX - canvas.offsetLeft;
-	    if(relativeX > 0 && relativeX < canvas.width) {
+	    if(relativeX > 0 && relativeX < canvas.width - paddle.width) {
 	        paddle.setPosition(relativeX);
 	    }
 	  }
 	}
 	module.exports = Controller;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+	
+	PRIZE_IMAGE = {
+	  "grow": "../images/mushroom.png",
+	  2: "#FFA500",
+	  3: "#FFFF00",
+	  4: "#008000",
+	  5: "#0000FF",
+	  6: "#800080",
+	  7: "#A9A9A9"
+	};
+	
+	function Prize(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+	  this.setPosition(this.canvas.width/2, this.canvas.height-30);
+	
+	}
+	
+	Prize.prototype.setPosition = function(x, y) {
+	  this.x = x || this.x;
+	  this.y = y || this.y;
+	};
+	
+	Prize.prototype.setType = function(type) {
+	  this.type = type;
+	  this.img = new Image();   // Create new img element
+	  this.img.src = PRIZE_IMAGE[type]; // Set source path
+	
+	};
+	
+	Prize.prototype.render = function(){
+	  var ctx = this.ctx;
+	  ctx.drawImage(this.img,0,0);
+	  ctx.beginPath();
+	  ctx.moveTo(30,96);
+	  ctx.lineTo(70,66);
+	  ctx.lineTo(103,76);
+	  ctx.lineTo(170,15);
+	  ctx.stroke();
+	};
+	
+	module.exports = Prize;
 
 
 /***/ }

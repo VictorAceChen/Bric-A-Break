@@ -3,8 +3,8 @@ var Entity = require("./entity.js");
 function Paddle(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 
-  this.height = 10;
-  this.width= 110;
+  this.height = 15;
+  this.width= 120;
   this.x = (canvas.width - this.width)/2;
   this.y = canvas.height - this.height - 20;
   this.color = "#FFFFFF";

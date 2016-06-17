@@ -3,7 +3,7 @@ var Entity = require("./entity.js");
 function Ball(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 
-  this.setPosition(this.canvas.width/2, this.canvas.height-30);
+  this.setPosition(this.canvas.width/2, this.canvas.height-75);
   this.setVelocity(2, -2);
   this.radius = 7;
   this.color = "#FFFFFF";
@@ -14,13 +14,13 @@ Ball.prototype = new Entity();
 Ball.prototype.constructor = Ball;
 
 Ball.prototype.setPosition = function(x, y) {
-  this.x = x || this.x;
-  this.y = y || this.y;
+  this.x = x;
+  this.y = y;
 };
 
 Ball.prototype.setVelocity = function(dx, dy) {
-  this.dx = dx || this.dx;
-  this.dy = dy || this.dy;
+  this.dx = dx;
+  this.dy = dy;
 };
 
 Ball.prototype.getLeftEdge = function() {
