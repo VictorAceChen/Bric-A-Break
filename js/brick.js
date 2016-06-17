@@ -1,13 +1,13 @@
 var Entity = require("./entity.js");
 
 STRENGTH_DISPLAY = {
-1: "#FF0000",
-2: "#FFA500",
-3: "#FFFF00",
-4: "#008000",
-5: "#0000FF",
-6: "#800080",
-7: "#A9A9A9"
+  1: "#FF0000",
+  2: "#FFA500",
+  3: "#FFFF00",
+  4: "#008000",
+  5: "#0000FF",
+  6: "#800080",
+  7: "#A9A9A9"
 };
 
 function Brick(canvas, ctx) {
