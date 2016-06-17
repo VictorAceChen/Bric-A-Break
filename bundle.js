@@ -49,7 +49,7 @@
 	var Paddle = __webpack_require__(3);
 	var Bricks = __webpack_require__(4);
 	var CollisionDetection = __webpack_require__(6);
-	var Status = __webpack_require__(10);
+	var Status = __webpack_require__(7);
 	var Controller = __webpack_require__(8);
 	
 	// set canvas base
@@ -89,7 +89,7 @@
 	
 	  this.setPosition(this.canvas.width/2, this.canvas.height-30);
 	  this.setVelocity(2, -2);
-	  this.radius = 10;
+	  this.radius = 7;
 	  this.color = "#FFFFFF";
 	}
 	
@@ -108,38 +108,42 @@
 	};
 	
 	Ball.prototype.getLeftEdge = function() {
-	  return this.x + this.dx;
+	  // return this.x + this.dx;
+	  return {x: this.x - this.radius, y: this.y};
 	};
 	
 	Ball.prototype.getTopEdge = function() {
-	  return this.y + this.dy;
+	  // return this.y + this.dy;
+	  return {x: this.x, y: this.y - this.radius};
 	};
 	
 	Ball.prototype.getRightEdge = function() {
-	  return this.x + this.dx + this.radius;
+	  // return this.x + this.dx + this.radius;
+	  return {x: this.x + this.radius, y: this.y};
 	};
 	
 	Ball.prototype.getBottomEdge = function() {
-	  return this.y + this.dy + this.radius;
+	  // return this.y + this.dy + this.radius;
+	  return {x: this.x, y: this.y + this.radius};
 	};
 	
 	Ball.prototype.shiftVertical = function() {
-	  this.dy = -this.dy;
+	  this.dy *= -1;
 	};
 	
 	Ball.prototype.shiftHorizontal = function() {
-	  this.dx = -this.dx;
+	  this.dx *= -1;
 	};
 	
 	Ball.prototype.bounce = function() {
 	  // bounce off top or bottom
-	  if(this.getBottomEdge() > this.canvas.height ||
-	    this.getTopEdge() < 0) {
+	  if(this.getBottomEdge().y > this.canvas.height ||
+	    this.getTopEdge().y < 0) {
 	  this.shiftVertical();
 	  }
 	  // bounce off left or right
-	  if(this.getRightEdge() > this.canvas.width ||
-	    this.getLeftEdge() < 0) {
+	  if(this.getRightEdge().x > this.canvas.width ||
+	    this.getLeftEdge().x < 0) {
 	      this.shiftHorizontal();
 	  }
 	};
@@ -377,15 +381,36 @@
 	  var ball = this.ball;
 	  var bricks = this.bricks;
 	  var stat = this.stat;
-	  
+	  var isHit = false;
+	
+	  var isRectOverlap = this.isRectOverlap;
+	
 	  bricks.list.forEach(function(row){
 	    row.forEach(function(brick, index){
-	      if(brick.isHit(ball)) {
-	        stat.scorePoint();
+	      var isHit = false;
+	      // ball hits by left/right
+	      if(isRectOverlap(brick, ball.getLeftEdge()) ||
+	        isRectOverlap(brick, ball.getRightEdge()) ) {
+	        ball.shiftHorizontal();
+	        isHit = true;
+	        // ball hits by top/bottom
+	      } else if (isRectOverlap(brick, ball.getTopEdge()) ||
+	        isRectOverlap(brick, ball.getBottomEdge()) ) {
 	        ball.shiftVertical();
+	        isHit = true;
+	      }
+	
+	      if(isHit){
+	        stat.scorePoint();
 	        brick.weaken();
 	        if (brick.isDead()) row.splice(index, 1);
 	      }
+	      // if(brick.isHit(ball)) {
+	      //   stat.scorePoint();
+	      //   ball.shiftVertical();
+	      //   brick.weaken();
+	      //   if (brick.isDead()) row.splice(index, 1);
+	      // }
 	    });
 	  });
 	};
@@ -395,15 +420,51 @@
 	  var paddle = this.paddle;
 	
 	      if(paddle.isHit(ball)) {
-	            ball.dy = -Math.abs(ball.dy);
+	            ball.dy = -Math.abs(ball.dy); //always go up
 	      }
+	};
+	
+	CollisionDetection.prototype.isRectOverlap = function(rect, point) {
+	  return point.x > rect.x &&
+	    point.x < rect.x + rect.width &&
+	    point.y > rect.y &&
+	    point.y < rect.y + rect.height;
 	};
 	
 	module.exports = CollisionDetection;
 
 
 /***/ },
-/* 7 */,
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+	
+	function Status(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+	  this.score = 0;
+	
+	}
+	
+	Status.prototype = new Entity();
+	Status.prototype.constructor = Status;
+	
+	Status.prototype.scorePoint = function() {
+	  this.score += 1;
+	};
+	
+	Status.prototype.render = function() {
+	  var ctx = this.ctx;
+	  ctx.font = "16px Arial";
+	  ctx.fillStyle = "#0095DD";
+	  ctx.fillText("Score: " + this.score,
+	     8, this.canvas.height - 10);
+	};
+	
+	module.exports = Status;
+
+
+/***/ },
 /* 8 */
 /***/ function(module, exports) {
 
@@ -431,37 +492,6 @@
 	  }
 	}
 	module.exports = Controller;
-
-
-/***/ },
-/* 9 */,
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Entity = __webpack_require__(2);
-	
-	function Status(canvas, ctx) {
-	  Entity.call(this, canvas, ctx);
-	  this.score = 0;
-	
-	}
-	
-	Status.prototype = new Entity();
-	Status.prototype.constructor = Status;
-	
-	Status.prototype.scorePoint = function() {
-	  this.score += 1;
-	};
-	
-	Status.prototype.render = function() {
-	  var ctx = this.ctx;
-	  ctx.font = "16px Arial";
-	  ctx.fillStyle = "#0095DD";
-	  ctx.fillText("Score: " + this.score,
-	     8, this.canvas.height - 10);
-	};
-	
-	module.exports = Status;
 
 
 /***/ }

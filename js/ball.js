@@ -5,7 +5,7 @@ function Ball(canvas, ctx) {
 
   this.setPosition(this.canvas.width/2, this.canvas.height-30);
   this.setVelocity(2, -2);
-  this.radius = 10;
+  this.radius = 7;
   this.color = "#FFFFFF";
 }
 
@@ -24,38 +24,42 @@ Ball.prototype.setVelocity = function(dx, dy) {
 };
 
 Ball.prototype.getLeftEdge = function() {
-  return this.x + this.dx;
+  // return this.x + this.dx;
+  return {x: this.x - this.radius, y: this.y};
 };
 
 Ball.prototype.getTopEdge = function() {
-  return this.y + this.dy;
+  // return this.y + this.dy;
+  return {x: this.x, y: this.y - this.radius};
 };
 
 Ball.prototype.getRightEdge = function() {
-  return this.x + this.dx + this.radius;
+  // return this.x + this.dx + this.radius;
+  return {x: this.x + this.radius, y: this.y};
 };
 
 Ball.prototype.getBottomEdge = function() {
-  return this.y + this.dy + this.radius;
+  // return this.y + this.dy + this.radius;
+  return {x: this.x, y: this.y + this.radius};
 };
 
 Ball.prototype.shiftVertical = function() {
-  this.dy = -this.dy;
+  this.dy *= -1;
 };
 
 Ball.prototype.shiftHorizontal = function() {
-  this.dx = -this.dx;
+  this.dx *= -1;
 };
 
 Ball.prototype.bounce = function() {
   // bounce off top or bottom
-  if(this.getBottomEdge() > this.canvas.height ||
-    this.getTopEdge() < 0) {
+  if(this.getBottomEdge().y > this.canvas.height ||
+    this.getTopEdge().y < 0) {
   this.shiftVertical();
   }
   // bounce off left or right
-  if(this.getRightEdge() > this.canvas.width ||
-    this.getLeftEdge() < 0) {
+  if(this.getRightEdge().x > this.canvas.width ||
+    this.getLeftEdge().x < 0) {
       this.shiftHorizontal();
   }
 };
