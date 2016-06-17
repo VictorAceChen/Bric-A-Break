@@ -6,7 +6,7 @@ function Paddle(canvas, ctx) {
   this.height = 10;
   this.width= 110;
   this.x = (canvas.width - this.width)/2;
-  this.y = this.canvas.height - this.height - 20;
+  this.y = canvas.height - this.height - 20;
   this.color = "#FFFFFF";
 }
 
@@ -21,6 +21,14 @@ Paddle.prototype.moveLeft = function() {
 Paddle.prototype.moveRight = function() {
     if (this.x < 0) return; //don't cross wall
     this.x -= 10;
+};
+
+Paddle.prototype.setPosition = function(x) {
+    this.x = x;
+};
+
+Paddle.prototype.resetPosition = function(x) {
+    this.x = (this.canvas.width - this.width)/2;
 };
 
 Paddle.prototype.isHit = function(ball) {

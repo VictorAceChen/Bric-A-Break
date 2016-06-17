@@ -12,7 +12,7 @@ var ctx = canvas.getContext("2d");
 
 //set entities
 var paddle = new Paddle(canvas, ctx);
-var controller = new Controller(paddle);
+var controller = new Controller(paddle, canvas);
 var ball = new Ball(canvas, ctx);
 var bricks = new Bricks(canvas, ctx);
 var status = new Status(canvas, ctx);

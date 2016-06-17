@@ -58,7 +58,7 @@
 	
 	//set entities
 	var paddle = new Paddle(canvas, ctx);
-	var controller = new Controller(paddle);
+	var controller = new Controller(paddle, canvas);
 	var ball = new Ball(canvas, ctx);
 	var bricks = new Bricks(canvas, ctx);
 	var status = new Status(canvas, ctx);
@@ -192,7 +192,7 @@
 	  this.height = 10;
 	  this.width= 110;
 	  this.x = (canvas.width - this.width)/2;
-	  this.y = this.canvas.height - this.height - 20;
+	  this.y = canvas.height - this.height - 20;
 	  this.color = "#FFFFFF";
 	}
 	
@@ -207,6 +207,14 @@
 	Paddle.prototype.moveRight = function() {
 	    if (this.x < 0) return; //don't cross wall
 	    this.x -= 10;
+	};
+	
+	Paddle.prototype.setPosition = function(x) {
+	    this.x = x;
+	};
+	
+	Paddle.prototype.resetPosition = function(x) {
+	    this.x = (this.canvas.width - this.width)/2;
 	};
 	
 	Paddle.prototype.isHit = function(ball) {
@@ -476,9 +484,10 @@
 /* 8 */
 /***/ function(module, exports) {
 
-	function Controller(paddle) {
+	function Controller(paddle,canvas) {
 	
 	  document.addEventListener("keydown", keyDownHandler, false);
+	  document.addEventListener("mousemove", mouseMoveHandler, false);
 	
 	  function keyDownHandler(e) {
 	    e.preventDefault();
@@ -487,16 +496,23 @@
 	    case 39:
 	      paddle.moveLeft();
 	        break;
-	    case 65:
+	    case 68:
 	      paddle.moveLeft();
 	        break;
 	    case 37:
 	      paddle.moveRight();
 	        break;
-	    case 68:
+	    case 65:
 	      paddle.moveRight();
 	        break;
 	        }
+	  }
+	
+	  function mouseMoveHandler(e) {
+	    var relativeX = e.clientX - canvas.offsetLeft;
+	    if(relativeX > 0 && relativeX < canvas.width) {
+	        paddle.setPosition(relativeX);
+	    }
 	  }
 	}
 	module.exports = Controller;
