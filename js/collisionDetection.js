@@ -50,6 +50,7 @@ CollisionDetection.prototype.checkPaddle = function() {
       if(paddle.isHit(ball)) {
         var ballPos = ball.x - paddle.x;
 
+        // ball ricochet
         if(ball.x < paddle.x + paddle.width/9){
             ball.setVelocity(-4.2,-0.75);
         }else if(ball.x < paddle.x + (paddle.width/9 * 4)){

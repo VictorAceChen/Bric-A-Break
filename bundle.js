@@ -66,7 +66,7 @@
 	var collisionDetection = new CollisionDetection(ball, bricks, paddle, status);
 	var prize = new Prize(canvas, ctx);
 	prize.setType("grow");
-	
+	prize.setPosition(45,45);
 	
 	var play = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -76,26 +76,18 @@
 	  paddle.render();
 	  bricks.render();
 	  status.render();
-	  // prize.render();
+	  prize.render();
 	};
 	
 	var gameover = function () {
-	  this.img = new Image();   // Create new img element
-	  this.img.src = ""; // Set source path
-	  ctx.drawImage(this.img,0,0);
-	  ctx.beginPath();
-	  ctx.moveTo(30,96);
-	  ctx.lineTo(70,66);
-	  ctx.lineTo(103,76);
-	  ctx.lineTo(170,15);
-	  ctx.stroke();
+	  
 	};
 	
 	var run = function(){
 	
 	};
 	
-	  setInterval(play, 10);
+	  setInterval(play, 15);
 
 
 /***/ },
@@ -175,11 +167,13 @@
 	};
 	
 	Ball.prototype.render = function () {
+	  // draw
 	  this.ctx.beginPath();
 	  this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
 	  this.ctx.fillStyle = this.color;
 	  this.ctx.fill();
 	  this.ctx.closePath();
+	
 	  this.move();
 	};
 	
@@ -270,7 +264,7 @@
 	  Entity.call(this, canvas, ctx);
 	
 	  this.rows = 7;
-	  this.columns = 7;
+	  this.columns = 8;
 	  this.padding = 1;
 	  this.topMargin = 0;
 	  this.leftMargin = 20;
@@ -357,21 +351,26 @@
 	  return this.strength < 1;
 	};
 	
-	Brick.prototype.getLeftEdge = function() {
-	  return this.x - this.width;
+	Brick.prototype.getCenter = function() {
+	  return {x: this.x+this.width/2,y: this.y+this.height/2 };
 	};
 	
-	Brick.prototype.getTopEdge = function() {
-	  return this.y - this.height;
-	};
-	
-	Brick.prototype.getRightEdge = function() {
-	  return this.x + this.width;
-	};
-	
-	Brick.prototype.getBottomEdge = function() {
-	  return this.y + this.height;
-	};
+	//
+	// Brick.prototype.getLeftEdge = function() {
+	//   return this.x - this.width;
+	// };
+	//
+	// Brick.prototype.getTopEdge = function() {
+	//   return this.y - this.height;
+	// };
+	//
+	// Brick.prototype.getRightEdge = function() {
+	//   return this.x + this.width;
+	// };
+	//
+	// Brick.prototype.getBottomEdge = function() {
+	//   return this.y + this.height;
+	// };
 	
 	Brick.prototype.isHit = function(ball) {
 	  return ball.x > this.x &&
@@ -450,6 +449,7 @@
 	      if(paddle.isHit(ball)) {
 	        var ballPos = ball.x - paddle.x;
 	
+	        // ball ricochet
 	        if(ball.x < paddle.x + paddle.width/9){
 	            ball.setVelocity(-4.2,-0.75);
 	        }else if(ball.x < paddle.x + (paddle.width/9 * 4)){
@@ -558,9 +558,9 @@
 	var Entity = __webpack_require__(2);
 	
 	PRIZE_IMAGE = {
-	  "grow": "../images/mushroom.png",
+	  "grow": "images/mushroom.png",
 	  2: "#FFA500",
-	  3: "#FFFF00",
+	  "ball": null,
 	  4: "#008000",
 	  5: "#0000FF",
 	  6: "#800080",
@@ -570,30 +570,30 @@
 	function Prize(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	  this.setPosition(this.canvas.width/2, this.canvas.height-30);
-	
+	  this.img = new Image();   // Create new img element
+	  this.width = 25;
+	  this.height = 25;
 	}
 	
 	Prize.prototype.setPosition = function(x, y) {
-	  this.x = x || this.x;
-	  this.y = y || this.y;
+	  this.x = x;
+	  this.y = y;
 	};
 	
 	Prize.prototype.setType = function(type) {
 	  this.type = type;
-	  this.img = new Image();   // Create new img element
 	  this.img.src = PRIZE_IMAGE[type]; // Set source path
+	};
 	
+	Prize.prototype.getCenter = function() {
+	  return {x: this.x+this.width/2,y: this.y+this.height/2 };
 	};
 	
 	Prize.prototype.render = function(){
 	  var ctx = this.ctx;
-	  ctx.drawImage(this.img,0,0);
-	  ctx.beginPath();
-	  ctx.moveTo(30,96);
-	  ctx.lineTo(70,66);
-	  ctx.lineTo(103,76);
-	  ctx.lineTo(170,15);
-	  ctx.stroke();
+	  ctx.drawImage(this.img,this.x,this.y, this.width, this.height);
+	
+	  this.y += 1;
 	};
 	
 	module.exports = Prize;

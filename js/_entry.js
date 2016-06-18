@@ -20,7 +20,7 @@ var status = new Status(canvas, ctx);
 var collisionDetection = new CollisionDetection(ball, bricks, paddle, status);
 var prize = new Prize(canvas, ctx);
 prize.setType("grow");
-
+prize.setPosition(45,45);
 
 var play = function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -30,23 +30,15 @@ var play = function(){
   paddle.render();
   bricks.render();
   status.render();
-  // prize.render();
+  prize.render();
 };
 
 var gameover = function () {
-  this.img = new Image();   // Create new img element
-  this.img.src = ""; // Set source path
-  ctx.drawImage(this.img,0,0);
-  ctx.beginPath();
-  ctx.moveTo(30,96);
-  ctx.lineTo(70,66);
-  ctx.lineTo(103,76);
-  ctx.lineTo(170,15);
-  ctx.stroke();
+  
 };
 
 var run = function(){
 
 };
 
-  setInterval(play, 10);
+  setInterval(play, 15);

@@ -41,21 +41,26 @@ Brick.prototype.isDead = function () {
   return this.strength < 1;
 };
 
-Brick.prototype.getLeftEdge = function() {
-  return this.x - this.width;
+Brick.prototype.getCenter = function() {
+  return {x: this.x+this.width/2,y: this.y+this.height/2 };
 };
 
-Brick.prototype.getTopEdge = function() {
-  return this.y - this.height;
-};
-
-Brick.prototype.getRightEdge = function() {
-  return this.x + this.width;
-};
-
-Brick.prototype.getBottomEdge = function() {
-  return this.y + this.height;
-};
+//
+// Brick.prototype.getLeftEdge = function() {
+//   return this.x - this.width;
+// };
+//
+// Brick.prototype.getTopEdge = function() {
+//   return this.y - this.height;
+// };
+//
+// Brick.prototype.getRightEdge = function() {
+//   return this.x + this.width;
+// };
+//
+// Brick.prototype.getBottomEdge = function() {
+//   return this.y + this.height;
+// };
 
 Brick.prototype.isHit = function(ball) {
   return ball.x > this.x &&
