@@ -50,4 +50,14 @@ Paddle.prototype.render = function() {
   this.ctx.closePath();
 };
 
+Paddle.prototype.grow = function() {
+  if(this.width > 500) return;
+  this.width += 20;
+};
+
+Paddle.prototype.shrink = function() {
+  if(this.width < 20) return;
+  this.width -= 20;
+};
+
 module.exports = Paddle;
