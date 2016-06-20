@@ -259,7 +259,7 @@
 	};
 	
 	Paddle.prototype.shrink = function() {
-	  if(this.width < 20) return;
+	  if(this.width < 40) return;
 	  this.width -= 20;
 	};
 	
