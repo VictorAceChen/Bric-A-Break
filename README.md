@@ -2,6 +2,8 @@
 
   Bric-A-Break is a browser game written in Javascript based off of Breakout.
 
+Play it [here](https://victoracechen.github.io/Bric-A-Break/).
+
 ![Screenshot](game_sample.png)
 
 ### How to Play
