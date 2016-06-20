@@ -1,4 +1,4 @@
-# Bric-A-Break [Live](http://www.timothycallahan.io/NoMansLand)
+# Bric-A-Break [Live](https://victoracechen.github.io/Bric-A-Break/)
 
   Bric-A-Break is a browser game written in Javascript based off of Breakout.
 
