@@ -4,6 +4,7 @@ var Ball = require("./ball.js");
 function Balls(canvas, ctx) {
   Entity.call(this, canvas, ctx);
   this.list = [new Ball(canvas, ctx)];
+  // this.list.push(new Ball(canvas, ctx));
 }
 
 Balls.prototype = new Entity();

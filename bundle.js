@@ -46,14 +46,14 @@
 
 	// requirements
 	var Ball = __webpack_require__(1);
-	var Balls = __webpack_require__(11);
-	var Paddle = __webpack_require__(3);
-	var Bricks = __webpack_require__(4);
-	var CollisionDetection = __webpack_require__(6);
-	var Status = __webpack_require__(8);
-	var Controller = __webpack_require__(9);
-	var Prizes = __webpack_require__(10);
-	var Prize = __webpack_require__(7);
+	var Balls = __webpack_require__(3);
+	var Paddle = __webpack_require__(4);
+	var Bricks = __webpack_require__(5);
+	var CollisionDetection = __webpack_require__(7);
+	var Status = __webpack_require__(9);
+	var Controller = __webpack_require__(10);
+	var Prizes = __webpack_require__(11);
+	var Prize = __webpack_require__(8);
 	
 	// set canvas base
 	var canvas = document.getElementById("myCanvas");
@@ -62,22 +62,19 @@
 	//set entities
 	var paddle = new Paddle(canvas, ctx);
 	var controller = new Controller(paddle, canvas);
-	var ball = new Ball(canvas, ctx);
 	var balls = new Balls(canvas, ctx);
 	var bricks = new Bricks(canvas, ctx);
 	var status = new Status(canvas, ctx);
 	var prizes = new Prizes(canvas, ctx);
-	var collisionDetection = new CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas);
+	var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
 	var prize = new Prize(canvas, ctx);
 	prize.setType("grow");
 	prize.setPosition(45,45);
 	
 	var play = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
-	  collisionDetection.checkBricks();
-	  collisionDetection.checkPaddle();
+	  collisionDetection.checkBalls();
 	  collisionDetection.checkPrizes();
-	  ball.render();
 	  paddle.render();
 	  bricks.render();
 	  status.render();
@@ -206,6 +203,31 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
+	var Ball = __webpack_require__(1);
+	
+	function Balls(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+	  this.list = [new Ball(canvas, ctx)];
+	  // this.list.push(new Ball(canvas, ctx));
+	}
+	
+	Balls.prototype = new Entity();
+	Balls.prototype.constructor = Balls;
+	
+	Balls.prototype.render = function () {
+	      this.list.forEach(function(ball){
+	          ball.render();
+	      });
+	};
+	
+	module.exports = Balls;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
 	
 	function Paddle(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
@@ -271,11 +293,11 @@
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
-	var Brick = __webpack_require__(5);
+	var Brick = __webpack_require__(6);
 	
 	function Bricks(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
@@ -322,7 +344,7 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
@@ -411,13 +433,13 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Prize = __webpack_require__(7);
+	var Prize = __webpack_require__(8);
 	
-	function CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas) {
-	  this.ball = ball;
+	function CollisionDetection(balls, bricks, paddle, prizes, status, canvas) {
+	  this.balls = balls;
 	  this.bricks = bricks;
 	  this.prizes = prizes;
 	  this.paddle = paddle;
@@ -425,8 +447,18 @@
 	  this.canvas = canvas;
 	}
 	
-	CollisionDetection.prototype.checkBricks = function() {
-	  var ball = this.ball;
+	CollisionDetection.prototype.checkBalls = function() {
+	  var checkBricks = this.checkBricks.bind(this);
+	  var checkPaddle = this.checkPaddle.bind(this);
+	
+	  this.balls.list.forEach(function(ball){
+	    // if(ball.y < canvas.height) return;
+	    checkBricks(ball);
+	    checkPaddle(ball);
+	  });
+	};
+	
+	CollisionDetection.prototype.checkBricks = function(ball) {
 	  var bricks = this.bricks;
 	  var stat = this.stat;
 	  var isHit = false;
@@ -492,8 +524,8 @@
 	    });
 	};
 	
-	CollisionDetection.prototype.checkPaddle = function() {
-	  var ball = this.ball;
+	CollisionDetection.prototype.checkPaddle = function(ball) {
+	  // var ball = this.ball;
 	  var paddle = this.paddle;
 	
 	      if(paddle.isHit(ball)) {
@@ -537,7 +569,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
@@ -601,7 +633,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
@@ -635,7 +667,7 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	function Controller(paddle,canvas) {
@@ -673,11 +705,11 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
-	var Prize = __webpack_require__(7);
+	var Prize = __webpack_require__(8);
 	
 	function Prizes(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
@@ -694,30 +726,6 @@
 	    });
 	};
 	module.exports = Prizes;
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Entity = __webpack_require__(2);
-	var Ball = __webpack_require__(1);
-	
-	function Balls(canvas, ctx) {
-	  Entity.call(this, canvas, ctx);
-	  this.list = [new Ball(canvas, ctx)];
-	}
-	
-	Balls.prototype = new Entity();
-	Balls.prototype.constructor = Balls;
-	
-	Balls.prototype.render = function () {
-	      this.list.forEach(function(ball){
-	          ball.render();
-	      });
-	};
-	
-	module.exports = Balls;
 
 
 /***/ }

@@ -16,22 +16,19 @@ var ctx = canvas.getContext("2d");
 //set entities
 var paddle = new Paddle(canvas, ctx);
 var controller = new Controller(paddle, canvas);
-var ball = new Ball(canvas, ctx);
 var balls = new Balls(canvas, ctx);
 var bricks = new Bricks(canvas, ctx);
 var status = new Status(canvas, ctx);
 var prizes = new Prizes(canvas, ctx);
-var collisionDetection = new CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas);
+var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
 var prize = new Prize(canvas, ctx);
 prize.setType("grow");
 prize.setPosition(45,45);
 
 var play = function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  collisionDetection.checkBricks();
-  collisionDetection.checkPaddle();
+  collisionDetection.checkBalls();
   collisionDetection.checkPrizes();
-  ball.render();
   paddle.render();
   bricks.render();
   status.render();

@@ -1,7 +1,7 @@
 var Prize = require("./prize.js");
 
-function CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas) {
-  this.ball = ball;
+function CollisionDetection(balls, bricks, paddle, prizes, status, canvas) {
+  this.balls = balls;
   this.bricks = bricks;
   this.prizes = prizes;
   this.paddle = paddle;
@@ -9,8 +9,18 @@ function CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas)
   this.canvas = canvas;
 }
 
-CollisionDetection.prototype.checkBricks = function() {
-  var ball = this.ball;
+CollisionDetection.prototype.checkBalls = function() {
+  var checkBricks = this.checkBricks.bind(this);
+  var checkPaddle = this.checkPaddle.bind(this);
+
+  this.balls.list.forEach(function(ball){
+    // if(ball.y < canvas.height) return;
+    checkBricks(ball);
+    checkPaddle(ball);
+  });
+};
+
+CollisionDetection.prototype.checkBricks = function(ball) {
   var bricks = this.bricks;
   var stat = this.stat;
   var isHit = false;
@@ -76,8 +86,8 @@ CollisionDetection.prototype.checkPrizes = function() {
     });
 };
 
-CollisionDetection.prototype.checkPaddle = function() {
-  var ball = this.ball;
+CollisionDetection.prototype.checkPaddle = function(ball) {
+  // var ball = this.ball;
   var paddle = this.paddle;
 
       if(paddle.isHit(ball)) {
