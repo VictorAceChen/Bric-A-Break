@@ -3,7 +3,7 @@ var Entity = require("./entity.js");
 PRIZE_IMAGE = {
   "grow": "images/mushroom.png",
   "poison": "images/poison_mushroom.gif",
-  "ball": null,
+  "cherry": "images/cherry.png",
   "1up": "images/1up.png",
   5: "#0000FF",
   6: "#800080",
@@ -28,7 +28,9 @@ Prize.prototype.roulette = function() {
   var rand = Math.random();
   if(rand>0.95){
     this.setType("1up");
-  }else if(rand>0.55){
+  }else if(rand>0.68){
+    this.setType("cherry");
+  }else if(rand>0.38){
     this.setType("grow");
   }else{
     this.setType("poison");

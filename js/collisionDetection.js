@@ -64,6 +64,7 @@ CollisionDetection.prototype.checkPrizes = function() {
     var isOverlap = this.isOverlap;
     var isOutOfBound = this.isOutOfBound;
     var stat = this.stat;
+    var balls = this.balls;
 
     prizes.list.forEach(function(prize, index){
       if(isOverlap(paddle, prize)){
@@ -77,6 +78,9 @@ CollisionDetection.prototype.checkPrizes = function() {
           break;
           case "poison":
             paddle.shrink();
+          break;
+          case "cherry":
+            balls.addBall(paddle.x, paddle.y);
           break;
         }
       }

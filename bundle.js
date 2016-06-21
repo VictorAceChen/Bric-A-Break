@@ -214,6 +214,12 @@
 	Balls.prototype = new Entity();
 	Balls.prototype.constructor = Balls;
 	
+	Balls.prototype.addBall = function (x, y) {
+	  var ball = new Ball(this.canvas, this.ctx);
+	  ball.setPosition(x,y);
+	  this.list.push(ball);
+	};
+	
 	Balls.prototype.render = function () {
 	      this.list.forEach(function(ball){
 	          ball.render();
@@ -502,6 +508,7 @@
 	    var isOverlap = this.isOverlap;
 	    var isOutOfBound = this.isOutOfBound;
 	    var stat = this.stat;
+	    var balls = this.balls;
 	
 	    prizes.list.forEach(function(prize, index){
 	      if(isOverlap(paddle, prize)){
@@ -515,6 +522,9 @@
 	          break;
 	          case "poison":
 	            paddle.shrink();
+	          break;
+	          case "cherry":
+	            balls.addBall(paddle.x, paddle.y);
 	          break;
 	        }
 	      }
@@ -577,7 +587,7 @@
 	PRIZE_IMAGE = {
 	  "grow": "images/mushroom.png",
 	  "poison": "images/poison_mushroom.gif",
-	  "ball": null,
+	  "cherry": "images/cherry.png",
 	  "1up": "images/1up.png",
 	  5: "#0000FF",
 	  6: "#800080",
@@ -602,7 +612,9 @@
 	  var rand = Math.random();
 	  if(rand>0.95){
 	    this.setType("1up");
-	  }else if(rand>0.55){
+	  }else if(rand>0.68){
+	    this.setType("cherry");
+	  }else if(rand>0.38){
 	    this.setType("grow");
 	  }else{
 	    this.setType("poison");

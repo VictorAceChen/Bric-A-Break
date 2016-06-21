@@ -10,6 +10,12 @@ function Balls(canvas, ctx) {
 Balls.prototype = new Entity();
 Balls.prototype.constructor = Balls;
 
+Balls.prototype.addBall = function (x, y) {
+  var ball = new Ball(this.canvas, this.ctx);
+  ball.setPosition(x,y);
+  this.list.push(ball);
+};
+
 Balls.prototype.render = function () {
       this.list.forEach(function(ball){
           ball.render();
