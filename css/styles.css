@@ -9,3 +9,9 @@ body {
 canvas {
   border: 1px solid white;
 }
+
+#instructions {
+  color: white;
+  font-weight: bold;
+  float: right;
+}

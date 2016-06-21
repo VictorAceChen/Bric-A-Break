@@ -50,4 +50,17 @@ Paddle.prototype.render = function() {
   this.ctx.closePath();
 };
 
+<<<<<<< HEAD
+=======
+Paddle.prototype.grow = function() {
+  if(this.width > 500) return;
+  this.width += 20;
+};
+
+Paddle.prototype.shrink = function() {
+  if(this.width < 40) return;
+  this.width -= 20;
+};
+
+>>>>>>> gh-pages
 module.exports = Paddle;

@@ -5,7 +5,7 @@ var Bricks = require("./bricks.js");
 var CollisionDetection = require("./collisionDetection.js");
 var Status = require("./status.js");
 var Controller = require("./controller.js");
-var Prize = require("./prize.js");
+var Prizes = require("./prizes.js");
 
 // set canvas base
 var canvas = document.getElementById("myCanvas");
@@ -17,24 +17,23 @@ var controller = new Controller(paddle, canvas);
 var ball = new Ball(canvas, ctx);
 var bricks = new Bricks(canvas, ctx);
 var status = new Status(canvas, ctx);
-var collisionDetection = new CollisionDetection(ball, bricks, paddle, status);
+var prizes = new Prizes(canvas, ctx);
+var collisionDetection = new CollisionDetection(ball, bricks, paddle, prizes, status, canvas);
 var prize = new Prize(canvas, ctx);
-prize.setType("grow");
-prize.setPosition(45,45);
 
 var play = function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   collisionDetection.checkBricks();
   collisionDetection.checkPaddle();
+  collisionDetection.checkPrizes();
   ball.render();
   paddle.render();
   bricks.render();
   status.render();
-  prize.render();
 };
 
 var gameover = function () {
-  
+  prizes.render();
 };
 
 var run = function(){

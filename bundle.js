@@ -51,6 +51,10 @@
 	var CollisionDetection = __webpack_require__(6);
 	var Status = __webpack_require__(7);
 	var Controller = __webpack_require__(8);
+<<<<<<< HEAD
+=======
+	var Prizes = __webpack_require__(10);
+>>>>>>> gh-pages
 	var Prize = __webpack_require__(9);
 	
 	// set canvas base
@@ -63,7 +67,12 @@
 	var ball = new Ball(canvas, ctx);
 	var bricks = new Bricks(canvas, ctx);
 	var status = new Status(canvas, ctx);
+<<<<<<< HEAD
 	var collisionDetection = new CollisionDetection(ball, bricks, paddle, status);
+=======
+	var prizes = new Prizes(canvas, ctx);
+	var collisionDetection = new CollisionDetection(ball, bricks, paddle, prizes, status, canvas);
+>>>>>>> gh-pages
 	var prize = new Prize(canvas, ctx);
 	prize.setType("grow");
 	prize.setPosition(45,45);
@@ -72,15 +81,27 @@
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
 	  collisionDetection.checkBricks();
 	  collisionDetection.checkPaddle();
+<<<<<<< HEAD
+=======
+	  collisionDetection.checkPrizes();
+>>>>>>> gh-pages
 	  ball.render();
 	  paddle.render();
 	  bricks.render();
 	  status.render();
+<<<<<<< HEAD
 	  prize.render();
 	};
 	
 	var gameover = function () {
 	  
+=======
+	  prizes.render();
+	};
+	
+	var gameover = function () {
+	
+>>>>>>> gh-pages
 	};
 	
 	var run = function(){
@@ -100,7 +121,11 @@
 	  Entity.call(this, canvas, ctx);
 	
 	  this.setPosition(this.canvas.width/2, this.canvas.height-75);
+<<<<<<< HEAD
 	  this.setVelocity(2, -2);
+=======
+	  this.setVelocity(4, -4);
+>>>>>>> gh-pages
 	  this.radius = 7;
 	  this.color = "#FFFFFF";
 	}
@@ -250,6 +275,19 @@
 	  this.ctx.closePath();
 	};
 	
+<<<<<<< HEAD
+=======
+	Paddle.prototype.grow = function() {
+	  if(this.width > 500) return;
+	  this.width += 20;
+	};
+	
+	Paddle.prototype.shrink = function() {
+	  if(this.width < 40) return;
+	  this.width -= 20;
+	};
+	
+>>>>>>> gh-pages
 	module.exports = Paddle;
 
 
@@ -395,6 +433,7 @@
 
 /***/ },
 /* 6 */
+<<<<<<< HEAD
 /***/ function(module, exports) {
 
 	function CollisionDetection(ball, bricks, paddle, status) {
@@ -402,6 +441,19 @@
 	  this.bricks = bricks;
 	  this.paddle = paddle;
 	  this.stat = status;
+=======
+/***/ function(module, exports, __webpack_require__) {
+
+	var Prize = __webpack_require__(9);
+	
+	function CollisionDetection(ball, bricks, paddle, prizes, status, canvas) {
+	  this.ball = ball;
+	  this.bricks = bricks;
+	  this.prizes = prizes;
+	  this.paddle = paddle;
+	  this.stat = status;
+	  this.canvas = canvas;
+>>>>>>> gh-pages
 	}
 	
 	CollisionDetection.prototype.checkBricks = function() {
@@ -409,6 +461,10 @@
 	  var bricks = this.bricks;
 	  var stat = this.stat;
 	  var isHit = false;
+<<<<<<< HEAD
+=======
+	  var prizes = this.prizes;
+>>>>>>> gh-pages
 	
 	  var isRectOverlap = this.isRectOverlap;
 	
@@ -430,6 +486,7 @@
 	      if(isHit){
 	        stat.scorePoint();
 	        brick.weaken();
+<<<<<<< HEAD
 	        if (brick.isDead()) row.splice(index, 1);
 	      }
 	      // if(brick.isHit(ball)) {
@@ -438,10 +495,51 @@
 	      //   brick.weaken();
 	      //   if (brick.isDead()) row.splice(index, 1);
 	      // }
+=======
+	        if (brick.isDead()) {
+	          row.splice(index, 1);
+	          var prize = new Prize(brick.canvas, brick.ctx);
+	          prize.setPosition(brick.x,brick.y);
+	          prizes.list.push(prize);
+	        }
+	        return;
+	      }
+>>>>>>> gh-pages
 	    });
 	  });
 	};
 	
+<<<<<<< HEAD
+=======
+	CollisionDetection.prototype.checkPrizes = function() {
+	    var paddle  = this.paddle;
+	    var prizes = this.prizes;
+	    var isOverlap = this.isOverlap;
+	    var isOutOfBound = this.isOutOfBound;
+	    var stat = this.stat;
+	
+	    prizes.list.forEach(function(prize, index){
+	      if(isOverlap(paddle, prize)){
+	        prizes.list.splice(index,1);
+	        switch(prize.type){
+	          case "1up":
+	            stat.lives += 1;
+	          break;
+	          case "grow":
+	            paddle.grow();
+	          break;
+	          case "poison":
+	            paddle.shrink();
+	          break;
+	        }
+	      }
+	      else if(prize.isOutOfBound()){
+	        prizes.list.splice(index,1);
+	      }
+	    });
+	};
+	
+>>>>>>> gh-pages
 	CollisionDetection.prototype.checkPaddle = function() {
 	  var ball = this.ball;
 	  var paddle = this.paddle;
@@ -451,6 +549,7 @@
 	
 	        // ball ricochet
 	        if(ball.x < paddle.x + paddle.width/9){
+<<<<<<< HEAD
 	            ball.setVelocity(-4.2,-0.75);
 	        }else if(ball.x < paddle.x + (paddle.width/9 * 4)){
 	            ball.setVelocity(-2,-2);
@@ -460,11 +559,27 @@
 	            ball.setVelocity(2,-2);
 	        }else if(ball.x < paddle.x + paddle.width){
 	            ball.setVelocity(4.2,-0.75);
+=======
+	            ball.setVelocity(-6,-2);
+	        }else if(ball.x < paddle.x + (paddle.width/9 * 4)){
+	            ball.setVelocity(-4,-4);
+	        }else if(ball.x < paddle.x + (paddle.width/9 * 5)){
+	            ball.setVelocity(0,-6);
+	        }else if(ball.x < paddle.x + (paddle.width/9 * 8)){
+	            ball.setVelocity(4,-4);
+	        }else if(ball.x < paddle.x + paddle.width){
+	            ball.setVelocity(6,-2);
+>>>>>>> gh-pages
 	        }
 	
 	      }
 	};
 	
+<<<<<<< HEAD
+=======
+	
+	
+>>>>>>> gh-pages
 	CollisionDetection.prototype.isRectOverlap = function(rect, point) {
 	  return point.x > rect.x &&
 	    point.x < rect.x + rect.width &&
@@ -472,7 +587,16 @@
 	    point.y < rect.y + rect.height;
 	};
 	
+<<<<<<< HEAD
 	
+=======
+	CollisionDetection.prototype.isOverlap = function(rect1, rect2) {
+	  return rect1.x < rect2.x + rect2.width &&
+	     rect1.x + rect1.width > rect2.x &&
+	     rect1.y < rect2.y + rect2.height &&
+	     rect1.height + rect1.y > rect2.y;
+	};
+>>>>>>> gh-pages
 	
 	
 	
@@ -559,9 +683,15 @@
 	
 	PRIZE_IMAGE = {
 	  "grow": "images/mushroom.png",
+<<<<<<< HEAD
 	  2: "#FFA500",
 	  "ball": null,
 	  4: "#008000",
+=======
+	  "poison": "images/poison_mushroom.gif",
+	  "ball": null,
+	  "1up": "images/1up.png",
+>>>>>>> gh-pages
 	  5: "#0000FF",
 	  6: "#800080",
 	  7: "#A9A9A9"
@@ -573,6 +703,10 @@
 	  this.img = new Image();   // Create new img element
 	  this.width = 25;
 	  this.height = 25;
+<<<<<<< HEAD
+=======
+	  this.roulette();
+>>>>>>> gh-pages
 	}
 	
 	Prize.prototype.setPosition = function(x, y) {
@@ -580,13 +714,31 @@
 	  this.y = y;
 	};
 	
+<<<<<<< HEAD
+=======
+	Prize.prototype.roulette = function() {
+	  var rand = Math.random();
+	  if(rand>0.95){
+	    this.setType("1up");
+	  }else if(rand>0.55){
+	    this.setType("grow");
+	  }else{
+	    this.setType("poison");
+	  }
+	};
+	
+>>>>>>> gh-pages
 	Prize.prototype.setType = function(type) {
 	  this.type = type;
 	  this.img.src = PRIZE_IMAGE[type]; // Set source path
 	};
 	
 	Prize.prototype.getCenter = function() {
+<<<<<<< HEAD
 	  return {x: this.x+this.width/2,y: this.y+this.height/2 };
+=======
+	  return {x: this.x+this.width/2, y: this.y+this.height/2 };
+>>>>>>> gh-pages
 	};
 	
 	Prize.prototype.render = function(){
@@ -596,9 +748,43 @@
 	  this.y += 1;
 	};
 	
+<<<<<<< HEAD
 	module.exports = Prize;
 
 
+=======
+	Prize.prototype.isOutOfBound = function() {
+	  return this.y > this.canvas.height;
+	};
+	
+	module.exports = Prize;
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+	var Prize = __webpack_require__(9);
+	
+	function Prizes(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+	  this.list = [];
+	
+	}
+	
+	Prizes.prototype = new Entity();
+	Prizes.prototype.constructor = Prizes;
+	
+	Prizes.prototype.render = function () {
+	    this.list.forEach(function(prize){
+	        prize.render();
+	    });
+	};
+	module.exports = Prizes;
+
+
+>>>>>>> gh-pages
 /***/ }
 /******/ ]);
 //# sourceMappingURL=bundle.js.map
