@@ -1,6 +1,6 @@
 var Prize = require("./prize.js");
 
-function CollisionDetection(ball, bricks, paddle, prizes, status, canvas) {
+function CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas) {
   this.ball = ball;
   this.bricks = bricks;
   this.prizes = prizes;

@@ -46,13 +46,14 @@
 
 	// requirements
 	var Ball = __webpack_require__(1);
+	var Balls = __webpack_require__(11);
 	var Paddle = __webpack_require__(3);
 	var Bricks = __webpack_require__(4);
 	var CollisionDetection = __webpack_require__(6);
-	var Status = __webpack_require__(7);
-	var Controller = __webpack_require__(8);
+	var Status = __webpack_require__(8);
+	var Controller = __webpack_require__(9);
 	var Prizes = __webpack_require__(10);
-	var Prize = __webpack_require__(9);
+	var Prize = __webpack_require__(7);
 	
 	// set canvas base
 	var canvas = document.getElementById("myCanvas");
@@ -62,10 +63,11 @@
 	var paddle = new Paddle(canvas, ctx);
 	var controller = new Controller(paddle, canvas);
 	var ball = new Ball(canvas, ctx);
+	var balls = new Balls(canvas, ctx);
 	var bricks = new Bricks(canvas, ctx);
 	var status = new Status(canvas, ctx);
 	var prizes = new Prizes(canvas, ctx);
-	var collisionDetection = new CollisionDetection(ball, bricks, paddle, prizes, status, canvas);
+	var collisionDetection = new CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas);
 	var prize = new Prize(canvas, ctx);
 	prize.setType("grow");
 	prize.setPosition(45,45);
@@ -80,6 +82,7 @@
 	  bricks.render();
 	  status.render();
 	  prizes.render();
+	  balls.render();
 	};
 	
 	var gameover = function () {
@@ -152,7 +155,8 @@
 	
 	Ball.prototype.bounce = function() {
 	  // bounce off top or bottom
-	  if(this.getBottomEdge().y > this.canvas.height ||
+	  if(
+	    this.getBottomEdge().y > this.canvas.height ||
 	    this.getTopEdge().y < 0) {
 	  this.shiftVertical();
 	  }
@@ -410,9 +414,9 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Prize = __webpack_require__(9);
+	var Prize = __webpack_require__(7);
 	
-	function CollisionDetection(ball, bricks, paddle, prizes, status, canvas) {
+	function CollisionDetection(ball, balls, bricks, paddle, prizes, status, canvas) {
 	  this.ball = ball;
 	  this.bricks = bricks;
 	  this.prizes = prizes;
@@ -538,78 +542,6 @@
 
 	var Entity = __webpack_require__(2);
 	
-	function Status(canvas, ctx) {
-	  Entity.call(this, canvas, ctx);
-	  this.score = 0;
-	  this.lives = 3;
-	}
-	
-	Status.prototype = new Entity();
-	Status.prototype.constructor = Status;
-	
-	Status.prototype.scorePoint = function() {
-	  this.score += 1;
-	};
-	
-	Status.prototype.render = function() {
-	  var ctx = this.ctx;
-	  ctx.font = "16px Arial";
-	  ctx.fillStyle = "#0095DD";
-	  ctx.fillText("Score: " + this.score,
-	     8,
-	     this.canvas.height - 10);
-	  ctx.fillText("Lives: " + this.lives,
-	    this.canvas.width-65, 
-	    this.canvas.height - 10);
-	};
-	
-	module.exports = Status;
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	function Controller(paddle,canvas) {
-	
-	  document.addEventListener("keydown", keyDownHandler, false);
-	  document.addEventListener("mousemove", mouseMoveHandler, false);
-	
-	  function keyDownHandler(e) {
-	    e.preventDefault();
-	
-	    switch(e.keyCode) {
-	    case 39:
-	      paddle.moveLeft();
-	        break;
-	    case 68:
-	      paddle.moveLeft();
-	        break;
-	    case 37:
-	      paddle.moveRight();
-	        break;
-	    case 65:
-	      paddle.moveRight();
-	        break;
-	        }
-	  }
-	
-	  function mouseMoveHandler(e) {
-	    var relativeX = e.clientX - canvas.offsetLeft;
-	    if(relativeX > 0 && relativeX < canvas.width - paddle.width) {
-	        paddle.setPosition(relativeX);
-	    }
-	  }
-	}
-	module.exports = Controller;
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Entity = __webpack_require__(2);
-	
 	PRIZE_IMAGE = {
 	  "grow": "images/mushroom.png",
 	  "poison": "images/poison_mushroom.gif",
@@ -669,11 +601,83 @@
 
 
 /***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+	
+	function Status(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+	  this.score = 0;
+	  this.lives = 3;
+	}
+	
+	Status.prototype = new Entity();
+	Status.prototype.constructor = Status;
+	
+	Status.prototype.scorePoint = function() {
+	  this.score += 1;
+	};
+	
+	Status.prototype.render = function() {
+	  var ctx = this.ctx;
+	  ctx.font = "16px Arial";
+	  ctx.fillStyle = "#0095DD";
+	  ctx.fillText("Score: " + this.score,
+	     8,
+	     this.canvas.height - 10);
+	  ctx.fillText("Lives: " + this.lives,
+	    this.canvas.width-65, 
+	    this.canvas.height - 10);
+	};
+	
+	module.exports = Status;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	function Controller(paddle,canvas) {
+	
+	  document.addEventListener("keydown", keyDownHandler, false);
+	  document.addEventListener("mousemove", mouseMoveHandler, false);
+	
+	  function keyDownHandler(e) {
+	    e.preventDefault();
+	
+	    switch(e.keyCode) {
+	    case 39:
+	      paddle.moveLeft();
+	        break;
+	    case 68:
+	      paddle.moveLeft();
+	        break;
+	    case 37:
+	      paddle.moveRight();
+	        break;
+	    case 65:
+	      paddle.moveRight();
+	        break;
+	        }
+	  }
+	
+	  function mouseMoveHandler(e) {
+	    var relativeX = e.clientX - canvas.offsetLeft;
+	    if(relativeX > 0 && relativeX < canvas.width - paddle.width) {
+	        paddle.setPosition(relativeX);
+	    }
+	  }
+	}
+	module.exports = Controller;
+
+
+/***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
-	var Prize = __webpack_require__(9);
+	var Prize = __webpack_require__(7);
 	
 	function Prizes(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
@@ -690,6 +694,30 @@
 	    });
 	};
 	module.exports = Prizes;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+	var Ball = __webpack_require__(1);
+	
+	function Balls(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+	  this.list = [new Ball(canvas, ctx)];
+	}
+	
+	Balls.prototype = new Entity();
+	Balls.prototype.constructor = Balls;
+	
+	Balls.prototype.render = function () {
+	      this.list.forEach(function(ball){
+	          ball.render();
+	      });
+	};
+	
+	module.exports = Balls;
 
 
 /***/ }

@@ -53,7 +53,8 @@ Ball.prototype.shiftHorizontal = function() {
 
 Ball.prototype.bounce = function() {
   // bounce off top or bottom
-  if(this.getBottomEdge().y > this.canvas.height ||
+  if(
+    this.getBottomEdge().y > this.canvas.height ||
     this.getTopEdge().y < 0) {
   this.shiftVertical();
   }
