@@ -4,7 +4,7 @@ function Ball(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 
   this.setPosition(this.canvas.width/2, this.canvas.height-75);
-  this.setVelocity(4, -4);
+  this.setVelocity(2, -3);
   this.radius = 8;
   this.color = "#FFFFFF";
 }

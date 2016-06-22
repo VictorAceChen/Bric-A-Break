@@ -4,7 +4,6 @@ var Ball = require("./ball.js");
 function Balls(canvas, ctx) {
   Entity.call(this, canvas, ctx);
   this.list = [new Ball(canvas, ctx)];
-  // this.list.push(new Ball(canvas, ctx));
 }
 
 Balls.prototype = new Entity();
@@ -24,8 +23,13 @@ Balls.prototype.inflate = function () {
 
 Balls.prototype.accelerate = function () {
   this.list.forEach(function(ball){
+      ball.dx *= 2;
       ball.dy *= 2;
   });
+};
+
+Balls.prototype.reset = function () {
+  this.list = [new Ball(this.canvas, this.ctx)];
 };
 
 Balls.prototype.render = function () {

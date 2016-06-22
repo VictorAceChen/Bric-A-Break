@@ -10,14 +10,28 @@ function CollisionDetection(balls, bricks, paddle, prizes, status, canvas) {
 }
 
 CollisionDetection.prototype.checkBalls = function() {
+  var balls = this.balls;
+  var stat = this.stat;
   var checkBricks = this.checkBricks.bind(this);
   var checkPaddle = this.checkPaddle.bind(this);
 
-  this.balls.list.forEach(function(ball){
+  canvas = this.canvas;
+
+  balls.list.forEach(function(ball, index){
     // if(ball.y < canvas.height) return;
     checkBricks(ball);
     checkPaddle(ball);
+
+    if(ball.y > canvas.height) {
+      balls.list.splice(index,1);
+    }
+
   });
+
+  if(balls.list.length < 1) {
+    stat.lives -= 1;
+    balls.reset();
+  }
 };
 
 CollisionDetection.prototype.checkBricks = function(ball) {
@@ -62,7 +76,6 @@ CollisionDetection.prototype.checkPrizes = function() {
     var paddle  = this.paddle;
     var prizes = this.prizes;
     var isOverlap = this.isOverlap;
-    var isOutOfBound = this.isOutOfBound;
     var stat = this.stat;
     var balls = this.balls;
 

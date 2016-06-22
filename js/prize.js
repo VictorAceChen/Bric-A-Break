@@ -26,15 +26,15 @@ Prize.prototype.setPosition = function(x, y) {
 
 Prize.prototype.roulette = function() {
   var rand = Math.random();
-  if(rand>0.95){
+  if(rand>0.97){
     this.setType("1up");
-  }else if(rand>0.90){
+  }else if(rand>0.92){
     this.setType("star");
-  }else if(rand>0.80){
-    this.setType("cherry");
-  }else if(rand>0.6){
+  }else if(rand>0.75){
     this.setType("inflate");
-  }else if(rand>0.3){
+  }else if(rand>0.5){
+    this.setType("cherry");
+  }else if(rand>0.25){
     this.setType("grow");
   }else{
     this.setType("poison");

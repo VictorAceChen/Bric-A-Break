@@ -1,5 +1,4 @@
 // requirements
-var Ball = require("./ball.js");
 var Balls = require("./balls.js");
 var Paddle = require("./paddle.js");
 var Bricks = require("./bricks.js");
@@ -22,8 +21,13 @@ var status = new Status(canvas, ctx);
 var prizes = new Prizes(canvas, ctx);
 var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
 var prize = new Prize(canvas, ctx);
-prize.setType("grow");
-prize.setPosition(45,45);
+
+var checkGameover = function() {
+  if(status.lives < 0){
+    alert("GAME OVER");
+    document.location.reload();
+  }
+};
 
 var play = function(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -34,14 +38,8 @@ var play = function(){
   status.render();
   prizes.render();
   balls.render();
+
+  checkGameover();
 };
 
-var gameover = function () {
-
-};
-
-var run = function(){
-
-};
-
-  setInterval(play, 15);
+setInterval(play, 15);

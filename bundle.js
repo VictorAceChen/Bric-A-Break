@@ -45,7 +45,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// requirements
-	var Ball = __webpack_require__(1);
 	var Balls = __webpack_require__(3);
 	var Paddle = __webpack_require__(4);
 	var Bricks = __webpack_require__(5);
@@ -68,8 +67,13 @@
 	var prizes = new Prizes(canvas, ctx);
 	var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
 	var prize = new Prize(canvas, ctx);
-	prize.setType("grow");
-	prize.setPosition(45,45);
+	
+	var checkGameover = function() {
+	  if(status.lives < 0){
+	    alert("GAME OVER");
+	    document.location.reload();
+	  }
+	};
 	
 	var play = function(){
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -80,17 +84,11 @@
 	  status.render();
 	  prizes.render();
 	  balls.render();
+	
+	  checkGameover();
 	};
 	
-	var gameover = function () {
-	
-	};
-	
-	var run = function(){
-	
-	};
-	
-	  setInterval(play, 15);
+	setInterval(play, 15);
 
 
 /***/ },
@@ -103,7 +101,7 @@
 	  Entity.call(this, canvas, ctx);
 	
 	  this.setPosition(this.canvas.width/2, this.canvas.height-75);
-	  this.setVelocity(4, -4);
+	  this.setVelocity(2, -3);
 	  this.radius = 8;
 	  this.color = "#FFFFFF";
 	}
@@ -213,7 +211,6 @@
 	function Balls(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	  this.list = [new Ball(canvas, ctx)];
-	  // this.list.push(new Ball(canvas, ctx));
 	}
 	
 	Balls.prototype = new Entity();
@@ -233,8 +230,13 @@
 	
 	Balls.prototype.accelerate = function () {
 	  this.list.forEach(function(ball){
+	      ball.dx *= 2;
 	      ball.dy *= 2;
 	  });
+	};
+	
+	Balls.prototype.reset = function () {
+	  this.list = [new Ball(this.canvas, this.ctx)];
 	};
 	
 	Balls.prototype.render = function () {
@@ -475,14 +477,28 @@
 	}
 	
 	CollisionDetection.prototype.checkBalls = function() {
+	  var balls = this.balls;
+	  var stat = this.stat;
 	  var checkBricks = this.checkBricks.bind(this);
 	  var checkPaddle = this.checkPaddle.bind(this);
 	
-	  this.balls.list.forEach(function(ball){
+	  canvas = this.canvas;
+	
+	  balls.list.forEach(function(ball, index){
 	    // if(ball.y < canvas.height) return;
 	    checkBricks(ball);
 	    checkPaddle(ball);
+	
+	    if(ball.y > canvas.height) {
+	      balls.list.splice(index,1);
+	    }
+	
 	  });
+	
+	  if(balls.list.length < 1) {
+	    stat.lives -= 1;
+	    balls.reset();
+	  }
 	};
 	
 	CollisionDetection.prototype.checkBricks = function(ball) {
@@ -527,7 +543,6 @@
 	    var paddle  = this.paddle;
 	    var prizes = this.prizes;
 	    var isOverlap = this.isOverlap;
-	    var isOutOfBound = this.isOutOfBound;
 	    var stat = this.stat;
 	    var balls = this.balls;
 	
@@ -637,15 +652,15 @@
 	
 	Prize.prototype.roulette = function() {
 	  var rand = Math.random();
-	  if(rand>0.95){
+	  if(rand>0.97){
 	    this.setType("1up");
-	  }else if(rand>0.90){
+	  }else if(rand>0.92){
 	    this.setType("star");
-	  }else if(rand>0.80){
-	    this.setType("cherry");
-	  }else if(rand>0.6){
+	  }else if(rand>0.75){
 	    this.setType("inflate");
-	  }else if(rand>0.3){
+	  }else if(rand>0.5){
+	    this.setType("cherry");
+	  }else if(rand>0.25){
 	    this.setType("grow");
 	  }else{
 	    this.setType("poison");
