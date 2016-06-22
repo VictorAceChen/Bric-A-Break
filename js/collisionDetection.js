@@ -11,6 +11,7 @@ function CollisionDetection(balls, bricks, paddle, prizes, status, canvas) {
 
 CollisionDetection.prototype.checkBalls = function() {
   var balls = this.balls;
+  var paddle = this.paddle;
   var stat = this.stat;
   var checkBricks = this.checkBricks.bind(this);
   var checkPaddle = this.checkPaddle.bind(this);
@@ -31,6 +32,7 @@ CollisionDetection.prototype.checkBalls = function() {
   if(balls.list.length < 1) {
     stat.lives -= 1;
     balls.reset();
+    paddle.width= 120;
   }
 };
 

@@ -26,7 +26,7 @@ Prize.prototype.setPosition = function(x, y) {
 
 Prize.prototype.roulette = function() {
   var rand = Math.random();
-  if(rand>0.97){
+  if(rand>0.98){
     this.setType("1up");
   }else if(rand>0.92){
     this.setType("star");

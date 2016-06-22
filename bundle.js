@@ -478,6 +478,7 @@
 	
 	CollisionDetection.prototype.checkBalls = function() {
 	  var balls = this.balls;
+	  var paddle = this.paddle;
 	  var stat = this.stat;
 	  var checkBricks = this.checkBricks.bind(this);
 	  var checkPaddle = this.checkPaddle.bind(this);
@@ -498,6 +499,7 @@
 	  if(balls.list.length < 1) {
 	    stat.lives -= 1;
 	    balls.reset();
+	    paddle.width= 120;
 	  }
 	};
 	
@@ -652,7 +654,7 @@
 	
 	Prize.prototype.roulette = function() {
 	  var rand = Math.random();
-	  if(rand>0.97){
+	  if(rand>0.98){
 	    this.setType("1up");
 	  }else if(rand>0.92){
 	    this.setType("star");
