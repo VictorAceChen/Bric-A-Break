@@ -82,6 +82,12 @@ CollisionDetection.prototype.checkPrizes = function() {
           case "cherry":
             balls.addBall(paddle.x, paddle.y);
           break;
+          case "inflate":
+            balls.inflate();
+          break;
+          case "star":
+            balls.accelerate();
+          break;
         }
       }
       else if(prize.isOutOfBound()){

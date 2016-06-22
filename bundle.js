@@ -104,7 +104,7 @@
 	
 	  this.setPosition(this.canvas.width/2, this.canvas.height-75);
 	  this.setVelocity(4, -4);
-	  this.radius = 7;
+	  this.radius = 8;
 	  this.color = "#FFFFFF";
 	}
 	
@@ -153,7 +153,7 @@
 	Ball.prototype.bounce = function() {
 	  // bounce off top or bottom
 	  if(
-	    this.getBottomEdge().y > this.canvas.height ||
+	    // this.getBottomEdge().y > this.canvas.height ||
 	    this.getTopEdge().y < 0) {
 	  this.shiftVertical();
 	  }
@@ -168,6 +168,11 @@
 	  this.bounce();
 	  this.x += this.dx;
 	  this.y += this.dy;
+	};
+	
+	Ball.prototype.inflate = function() {
+	  if(this.radius>32) return;
+	  this.radius += 4;
 	};
 	
 	Ball.prototype.render = function () {
@@ -220,10 +225,22 @@
 	  this.list.push(ball);
 	};
 	
+	Balls.prototype.inflate = function () {
+	  this.list.forEach(function(ball){
+	      ball.inflate();
+	  });
+	};
+	
+	Balls.prototype.accelerate = function () {
+	  this.list.forEach(function(ball){
+	      ball.dy *= 2;
+	  });
+	};
+	
 	Balls.prototype.render = function () {
-	      this.list.forEach(function(ball){
-	          ball.render();
-	      });
+	  this.list.forEach(function(ball){
+	      ball.render();
+	  });
 	};
 	
 	module.exports = Balls;
@@ -280,7 +297,7 @@
 	    this.y,
 	    this.width,
 	    this.height);
-	  this.ctx.fillStyle = this.color = "#FFFFFF";
+	  this.ctx.fillStyle = this.color;
 	  this.ctx.fill();
 	  this.ctx.closePath();
 	};
@@ -292,7 +309,11 @@
 	
 	Paddle.prototype.shrink = function() {
 	  if(this.width < 40) return;
-	  this.width -= 20;
+	  this.width -= 30;
+	};
+	
+	Paddle.prototype.phase = function() {
+	  this.color = this.color === "#FFFFFF" ? "#000000" : "#FFFFFF";
 	};
 	
 	module.exports = Paddle;
@@ -526,6 +547,12 @@
 	          case "cherry":
 	            balls.addBall(paddle.x, paddle.y);
 	          break;
+	          case "inflate":
+	            balls.inflate();
+	          break;
+	          case "star":
+	            balls.accelerate();
+	          break;
 	        }
 	      }
 	      else if(prize.isOutOfBound()){
@@ -589,9 +616,9 @@
 	  "poison": "images/poison_mushroom.gif",
 	  "cherry": "images/cherry.png",
 	  "1up": "images/1up.png",
-	  5: "#0000FF",
-	  6: "#800080",
-	  7: "#A9A9A9"
+	  "boo": "images/boo.gif",
+	  "inflate": "images/dig_dug.png",
+	  "star": "images/star.png"
 	};
 	
 	function Prize(canvas, ctx) {
@@ -612,9 +639,13 @@
 	  var rand = Math.random();
 	  if(rand>0.95){
 	    this.setType("1up");
-	  }else if(rand>0.68){
+	  }else if(rand>0.90){
+	    this.setType("star");
+	  }else if(rand>0.80){
 	    this.setType("cherry");
-	  }else if(rand>0.38){
+	  }else if(rand>0.6){
+	    this.setType("inflate");
+	  }else if(rand>0.3){
 	    this.setType("grow");
 	  }else{
 	    this.setType("poison");

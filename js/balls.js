@@ -16,10 +16,22 @@ Balls.prototype.addBall = function (x, y) {
   this.list.push(ball);
 };
 
+Balls.prototype.inflate = function () {
+  this.list.forEach(function(ball){
+      ball.inflate();
+  });
+};
+
+Balls.prototype.accelerate = function () {
+  this.list.forEach(function(ball){
+      ball.dy *= 2;
+  });
+};
+
 Balls.prototype.render = function () {
-      this.list.forEach(function(ball){
-          ball.render();
-      });
+  this.list.forEach(function(ball){
+      ball.render();
+  });
 };
 
 module.exports = Balls;

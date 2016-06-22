@@ -5,9 +5,9 @@ PRIZE_IMAGE = {
   "poison": "images/poison_mushroom.gif",
   "cherry": "images/cherry.png",
   "1up": "images/1up.png",
-  5: "#0000FF",
-  6: "#800080",
-  7: "#A9A9A9"
+  "boo": "images/boo.gif",
+  "inflate": "images/dig_dug.png",
+  "star": "images/star.png"
 };
 
 function Prize(canvas, ctx) {
@@ -28,9 +28,13 @@ Prize.prototype.roulette = function() {
   var rand = Math.random();
   if(rand>0.95){
     this.setType("1up");
-  }else if(rand>0.68){
+  }else if(rand>0.90){
+    this.setType("star");
+  }else if(rand>0.80){
     this.setType("cherry");
-  }else if(rand>0.38){
+  }else if(rand>0.6){
+    this.setType("inflate");
+  }else if(rand>0.3){
     this.setType("grow");
   }else{
     this.setType("poison");

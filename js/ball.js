@@ -5,7 +5,7 @@ function Ball(canvas, ctx) {
 
   this.setPosition(this.canvas.width/2, this.canvas.height-75);
   this.setVelocity(4, -4);
-  this.radius = 7;
+  this.radius = 8;
   this.color = "#FFFFFF";
 }
 
@@ -54,7 +54,7 @@ Ball.prototype.shiftHorizontal = function() {
 Ball.prototype.bounce = function() {
   // bounce off top or bottom
   if(
-    this.getBottomEdge().y > this.canvas.height ||
+    // this.getBottomEdge().y > this.canvas.height ||
     this.getTopEdge().y < 0) {
   this.shiftVertical();
   }
@@ -69,6 +69,11 @@ Ball.prototype.move = function() {
   this.bounce();
   this.x += this.dx;
   this.y += this.dy;
+};
+
+Ball.prototype.inflate = function() {
+  if(this.radius>32) return;
+  this.radius += 4;
 };
 
 Ball.prototype.render = function () {

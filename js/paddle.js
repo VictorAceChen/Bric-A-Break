@@ -45,7 +45,7 @@ Paddle.prototype.render = function() {
     this.y,
     this.width,
     this.height);
-  this.ctx.fillStyle = this.color = "#FFFFFF";
+  this.ctx.fillStyle = this.color;
   this.ctx.fill();
   this.ctx.closePath();
 };
@@ -57,7 +57,11 @@ Paddle.prototype.grow = function() {
 
 Paddle.prototype.shrink = function() {
   if(this.width < 40) return;
-  this.width -= 20;
+  this.width -= 30;
+};
+
+Paddle.prototype.phase = function() {
+  this.color = this.color === "#FFFFFF" ? "#000000" : "#FFFFFF";
 };
 
 module.exports = Paddle;
