@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// requirements
-	var Balls = __webpack_require__(3);
+	var Balls = __webpack_require__(1);
 	var Paddle = __webpack_require__(4);
 	var Bricks = __webpack_require__(5);
 	var CollisionDetection = __webpack_require__(7);
@@ -93,6 +93,66 @@
 
 /***/ },
 /* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Entity = __webpack_require__(2);
+	var Ball = __webpack_require__(3);
+	
+	function Balls(canvas, ctx) {
+	  Entity.call(this, canvas, ctx);
+	  this.list = [new Ball(canvas, ctx)];
+	}
+	
+	Balls.prototype = new Entity();
+	Balls.prototype.constructor = Balls;
+	
+	Balls.prototype.addBall = function (x, y) {
+	  var ball = new Ball(this.canvas, this.ctx);
+	  ball.setPosition(x,y);
+	  this.list.push(ball);
+	};
+	
+	Balls.prototype.inflate = function () {
+	  this.list.forEach(function(ball){
+	      ball.inflate();
+	  });
+	};
+	
+	Balls.prototype.accelerate = function () {
+	  this.list.forEach(function(ball){
+	      ball.dx *= 2;
+	      ball.dy *= 2;
+	  });
+	};
+	
+	Balls.prototype.reset = function () {
+	  this.list = [new Ball(this.canvas, this.ctx)];
+	};
+	
+	Balls.prototype.render = function () {
+	  this.list.forEach(function(ball){
+	      ball.render();
+	  });
+	};
+	
+	module.exports = Balls;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	function Entity(theCanvas, context) {
+	  this.ctx = context;
+	  this.canvas = theCanvas;
+	
+	}
+	
+	module.exports = Entity;
+
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Entity = __webpack_require__(2);
@@ -173,6 +233,15 @@
 	  this.radius += 4;
 	};
 	
+	Ball.prototype.toRect = function () {
+	  return {
+	    x: this.x - this.radius,
+	    y: this.y - this.radius,
+	    width: this.radius * 2,
+	    height: this.radius * 2
+	  };
+	};
+	
 	Ball.prototype.render = function () {
 	  // draw
 	  this.ctx.beginPath();
@@ -186,66 +255,6 @@
 	
 	
 	module.exports = Ball;
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	function Entity(theCanvas, context) {
-	  this.ctx = context;
-	  this.canvas = theCanvas;
-	
-	}
-	
-	module.exports = Entity;
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Entity = __webpack_require__(2);
-	var Ball = __webpack_require__(1);
-	
-	function Balls(canvas, ctx) {
-	  Entity.call(this, canvas, ctx);
-	  this.list = [new Ball(canvas, ctx)];
-	}
-	
-	Balls.prototype = new Entity();
-	Balls.prototype.constructor = Balls;
-	
-	Balls.prototype.addBall = function (x, y) {
-	  var ball = new Ball(this.canvas, this.ctx);
-	  ball.setPosition(x,y);
-	  this.list.push(ball);
-	};
-	
-	Balls.prototype.inflate = function () {
-	  this.list.forEach(function(ball){
-	      ball.inflate();
-	  });
-	};
-	
-	Balls.prototype.accelerate = function () {
-	  this.list.forEach(function(ball){
-	      ball.dx *= 2;
-	      ball.dy *= 2;
-	  });
-	};
-	
-	Balls.prototype.reset = function () {
-	  this.list = [new Ball(this.canvas, this.ctx)];
-	};
-	
-	Balls.prototype.render = function () {
-	  this.list.forEach(function(ball){
-	      ball.render();
-	  });
-	};
-	
-	module.exports = Balls;
 
 
 /***/ },

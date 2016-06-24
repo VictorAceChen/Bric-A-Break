@@ -76,6 +76,15 @@ Ball.prototype.inflate = function() {
   this.radius += 4;
 };
 
+Ball.prototype.toRect = function () {
+  return {
+    x: this.x - this.radius,
+    y: this.y - this.radius,
+    width: this.radius * 2,
+    height: this.radius * 2
+  };
+};
+
 Ball.prototype.render = function () {
   // draw
   this.ctx.beginPath();
