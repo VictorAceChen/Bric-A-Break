@@ -23,7 +23,7 @@ var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, s
 var prize = new Prize(canvas, ctx);
 
 var checkGameover = function() {
-  if(status.lives < 0){
+  if(status.lives < 1){
     alert("GAME OVER");
     document.location.reload();
   }

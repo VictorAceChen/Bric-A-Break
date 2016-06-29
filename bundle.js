@@ -69,7 +69,7 @@
 	var prize = new Prize(canvas, ctx);
 	
 	var checkGameover = function() {
-	  if(status.lives < 0){
+	  if(status.lives < 1){
 	    alert("GAME OVER");
 	    document.location.reload();
 	  }
@@ -340,7 +340,7 @@
 	function Bricks(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	
-	  this.rows = 7;
+	  this.rows = 10;
 	  this.columns = 8;
 	  this.padding = 1;
 	  this.topMargin = 0;
@@ -417,7 +417,7 @@
 	};
 	
 	Brick.prototype.setStrength = function (value) {
-	  this.strength = value;
+	  this.strength = value < 2 ? 1 : value;
 	};
 	
 	Brick.prototype.weaken = function () {
@@ -576,7 +576,7 @@
 	          case "inflate":
 	            balls.inflate();
 	          break;
-	          case "star":
+	          case "fire":
 	            balls.accelerate();
 	          break;
 	        }
@@ -644,7 +644,7 @@
 	  "1up": "images/1up.png",
 	  "boo": "images/boo.gif",
 	  "inflate": "images/dig_dug.png",
-	  "star": "images/star.png"
+	  "fire": "images/fire.png"
 	};
 	
 	function Prize(canvas, ctx) {
@@ -666,7 +666,7 @@
 	  if(rand>0.98){
 	    this.setType("1up");
 	  }else if(rand>0.92){
-	    this.setType("star");
+	    this.setType("fire");
 	  }else if(rand>0.75){
 	    this.setType("inflate");
 	  }else if(rand>0.5){

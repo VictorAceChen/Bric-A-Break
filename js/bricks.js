@@ -4,7 +4,7 @@ var Brick = require("./brick.js");
 function Bricks(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 
-  this.rows = 7;
+  this.rows = 10;
   this.columns = 8;
   this.padding = 1;
   this.topMargin = 0;

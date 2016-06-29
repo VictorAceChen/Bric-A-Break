@@ -30,7 +30,7 @@ Brick.prototype.setPosition = function (x, y) {
 };
 
 Brick.prototype.setStrength = function (value) {
-  this.strength = value;
+  this.strength = value < 2 ? 1 : value;
 };
 
 Brick.prototype.weaken = function () {

@@ -100,7 +100,7 @@ CollisionDetection.prototype.checkPrizes = function() {
           case "inflate":
             balls.inflate();
           break;
-          case "star":
+          case "fire":
             balls.accelerate();
           break;
         }
