@@ -8,7 +8,8 @@ PRIZE_IMAGE = {
   "boo": "images/boo.gif",
   "inflate": "images/dig_dug.png",
   "fire": "images/fire.png",
-  "beer": "images/beer.png"
+  "beer": "images/beer.png",
+  "question": "images/block.png"
 };
 
 function Prize(canvas, ctx) {
@@ -31,11 +32,13 @@ Prize.prototype.roulette = function() {
     this.setType("1up");
   }else if(rand>0.95){
     this.setType("fire");
-  }else if(rand>0.9){
+  }else if(rand>0.87){
     this.setType("beer");
-  }else if(rand>0.85){
+  }else if(rand>0.67){
     this.setType("inflate");
   }else if(rand>0.45){
+    this.setType("question");
+  }else if(rand>0.35){
     this.setType("cherry");
   }else if(rand>0.10){
     this.setType("grow");

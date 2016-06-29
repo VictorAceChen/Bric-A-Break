@@ -16,3 +16,5 @@ canvas {
   float: right;
   margin-right: 45px;
 }
+
+* {cursor: none;}
