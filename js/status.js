@@ -3,7 +3,7 @@ var Entity = require("./entity.js");
 function Status(canvas, ctx) {
   Entity.call(this, canvas, ctx);
   this.score = 0;
-  this.lives = 3;
+  this.lives = 0;
 }
 
 Status.prototype = new Entity();
@@ -21,8 +21,14 @@ Status.prototype.render = function() {
      8,
      this.canvas.height - 10);
   ctx.fillText("Lives: " + this.lives,
-    this.canvas.width-65, 
+    this.canvas.width-65,
     this.canvas.height - 10);
+};
+
+Status.prototype.restart = function() {
+  if(this.lives > 0) return; 
+  this.score = 0;
+  this.lives = 3;
 };
 
 module.exports = Status;

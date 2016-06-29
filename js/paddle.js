@@ -64,4 +64,51 @@ Paddle.prototype.phase = function() {
   this.color = this.color === "#FFFFFF" ? "#000000" : "#FFFFFF";
 };
 
+Paddle.prototype.getLeftEdge = function() {
+  return {
+    x: this.x,
+    y: this.y,
+    width: this.width/9,
+    height: this.height
+    };
+  };
+
+Paddle.prototype.getRightEdge = function() {
+  return {
+    x: this.x * 8 /9,
+    y: this.y,
+    width: this.width  /9,
+    height: this.height
+  };
+};
+
+Paddle.prototype.getLeftCenter = function() {
+  return {
+    x: this.x + this.width/9,
+    y: this.y,
+    width: this.width * 3 /9,
+    height: this.height
+  };
+};
+
+Paddle.prototype.getCenter = function() {
+  return {
+    x: this.x + this.width * 4/9,
+    y: this.y,
+    width: this.width * 1/9,
+    height: this.height
+  };
+};
+
+Paddle.prototype.getRightCenter = function() {
+  return {
+    x: this.x + this.width * 5/9,
+    y: this.y,
+    width: this.width * 3/9,
+    height: this.height
+  };
+};
+  // return paddle.x + paddle.width/9;
+
+
 module.exports = Paddle;

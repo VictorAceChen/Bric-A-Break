@@ -1,12 +1,18 @@
-function Controller(paddle,canvas) {
+function Controller(status, paddle,canvas) {
 
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("mousemove", mouseMoveHandler, false);
+
+  var isMovingLeft = false;
+  var isMovingRight = false;
 
   function keyDownHandler(e) {
     e.preventDefault();
 
     switch(e.keyCode) {
+    case 13:
+      status.restart();
+        break;
     case 39:
       paddle.moveLeft();
         break;

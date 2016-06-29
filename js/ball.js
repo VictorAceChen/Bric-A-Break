@@ -78,7 +78,7 @@ Ball.prototype.move = function() {
 
 Ball.prototype.inflate = function() {
   if(this.radius>32) return;
-  this.radius += 4;
+  this.radius += 5;
 };
 
 Ball.prototype.toRect = function () {

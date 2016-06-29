@@ -119,13 +119,23 @@ CollisionDetection.prototype.checkPrizes = function() {
 };
 
 CollisionDetection.prototype.checkPaddle = function(ball) {
-  // var ball = this.ball;
+  // var ballRect = ball.toRect();
   var paddle = this.paddle;
 
       if(paddle.isHit(ball)) {
-        var ballPos = ball.x - paddle.x;
-
+        // if(this.isRectOverlap(ballRect, paddle.getLeftEdge())){
+        //     ball.setVelocity(-6,-2);
+        // }else if(this.isRectOverlap(ballRect, paddle.getLeftCenter())){
+        //     ball.setVelocity(-4,-4);
+        // }else if(this.isRectOverlap(ballRect, paddle.getCenter())){
+        //     ball.setVelocity(0,-6);
+        // }else if(this.isRectOverlap(ballRect, paddle.getRightCenter())){
+        //     ball.setVelocity(4,-4);
+        // }else if(this.isRectOverlap(ballRect, paddle.getRightEdge())){
+        //     ball.setVelocity(6,-2);
+        // }
         // ball ricochet
+        var ballPos = ball.x - paddle.x;
         if(ball.x < paddle.x + paddle.width/9){
             ball.setVelocity(-6,-2);
         }else if(ball.x < paddle.x + (paddle.width/9 * 4)){
@@ -137,7 +147,6 @@ CollisionDetection.prototype.checkPaddle = function(ball) {
         }else if(ball.x < paddle.x + paddle.width){
             ball.setVelocity(6,-2);
         }
-
       }
 };
 

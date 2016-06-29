@@ -60,18 +60,19 @@
 	
 	//set entities
 	var paddle = new Paddle(canvas, ctx);
-	var controller = new Controller(paddle, canvas);
 	var balls = new Balls(canvas, ctx);
 	var bricks = new Bricks(canvas, ctx);
 	var status = new Status(canvas, ctx);
 	var prizes = new Prizes(canvas, ctx);
+	// var prize = new Prize(canvas, ctx);
+	var controller = new Controller(status, paddle, canvas);
 	var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
-	var prize = new Prize(canvas, ctx);
 	
 	var checkGameover = function() {
 	  if(status.lives < 1){
-	    alert("GAME OVER");
-	    document.location.reload();
+	    gameover();
+	  }else{
+	    play();
 	  }
 	};
 	
@@ -85,10 +86,17 @@
 	  prizes.render();
 	  balls.render();
 	
-	  checkGameover();
 	};
 	
-	setInterval(play, 15);
+	var gameover = function() {
+	  ctx.clearRect(0, 0, canvas.width, canvas.height);
+	  ctx.font = "48px serif";
+	  ctx.fillStyle = "#0095DD";
+	  ctx.fillText("Game Over", 10, 50);
+	  ctx.fillText("Press [Enter] to start", 10, 100);
+	};
+	
+	setInterval(checkGameover, 15);
 
 
 /***/ },
@@ -242,7 +250,7 @@
 	
 	Ball.prototype.inflate = function() {
 	  if(this.radius>32) return;
-	  this.radius += 4;
+	  this.radius += 5;
 	};
 	
 	Ball.prototype.toRect = function () {
@@ -338,6 +346,53 @@
 	Paddle.prototype.phase = function() {
 	  this.color = this.color === "#FFFFFF" ? "#000000" : "#FFFFFF";
 	};
+	
+	Paddle.prototype.getLeftEdge = function() {
+	  return {
+	    x: this.x,
+	    y: this.y,
+	    width: this.width/9,
+	    height: this.height
+	    };
+	  };
+	
+	Paddle.prototype.getRightEdge = function() {
+	  return {
+	    x: this.x * 8 /9,
+	    y: this.y,
+	    width: this.width  /9,
+	    height: this.height
+	  };
+	};
+	
+	Paddle.prototype.getLeftCenter = function() {
+	  return {
+	    x: this.x + this.width/9,
+	    y: this.y,
+	    width: this.width * 3 /9,
+	    height: this.height
+	  };
+	};
+	
+	Paddle.prototype.getCenter = function() {
+	  return {
+	    x: this.x + this.width * 4/9,
+	    y: this.y,
+	    width: this.width * 1/9,
+	    height: this.height
+	  };
+	};
+	
+	Paddle.prototype.getRightCenter = function() {
+	  return {
+	    x: this.x + this.width * 5/9,
+	    y: this.y,
+	    width: this.width * 3/9,
+	    height: this.height
+	  };
+	};
+	  // return paddle.x + paddle.width/9;
+	
 	
 	module.exports = Paddle;
 
@@ -603,13 +658,23 @@
 	};
 	
 	CollisionDetection.prototype.checkPaddle = function(ball) {
-	  // var ball = this.ball;
+	  // var ballRect = ball.toRect();
 	  var paddle = this.paddle;
 	
 	      if(paddle.isHit(ball)) {
-	        var ballPos = ball.x - paddle.x;
-	
+	        // if(this.isRectOverlap(ballRect, paddle.getLeftEdge())){
+	        //     ball.setVelocity(-6,-2);
+	        // }else if(this.isRectOverlap(ballRect, paddle.getLeftCenter())){
+	        //     ball.setVelocity(-4,-4);
+	        // }else if(this.isRectOverlap(ballRect, paddle.getCenter())){
+	        //     ball.setVelocity(0,-6);
+	        // }else if(this.isRectOverlap(ballRect, paddle.getRightCenter())){
+	        //     ball.setVelocity(4,-4);
+	        // }else if(this.isRectOverlap(ballRect, paddle.getRightEdge())){
+	        //     ball.setVelocity(6,-2);
+	        // }
 	        // ball ricochet
+	        var ballPos = ball.x - paddle.x;
 	        if(ball.x < paddle.x + paddle.width/9){
 	            ball.setVelocity(-6,-2);
 	        }else if(ball.x < paddle.x + (paddle.width/9 * 4)){
@@ -621,7 +686,6 @@
 	        }else if(ball.x < paddle.x + paddle.width){
 	            ball.setVelocity(6,-2);
 	        }
-	
 	      }
 	};
 	
@@ -731,7 +795,7 @@
 	function Status(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	  this.score = 0;
-	  this.lives = 3;
+	  this.lives = 0;
 	}
 	
 	Status.prototype = new Entity();
@@ -749,8 +813,14 @@
 	     8,
 	     this.canvas.height - 10);
 	  ctx.fillText("Lives: " + this.lives,
-	    this.canvas.width-65, 
+	    this.canvas.width-65,
 	    this.canvas.height - 10);
+	};
+	
+	Status.prototype.restart = function() {
+	  if(this.lives > 0) return; 
+	  this.score = 0;
+	  this.lives = 3;
 	};
 	
 	module.exports = Status;
@@ -760,15 +830,21 @@
 /* 10 */
 /***/ function(module, exports) {
 
-	function Controller(paddle,canvas) {
+	function Controller(status, paddle,canvas) {
 	
 	  document.addEventListener("keydown", keyDownHandler, false);
 	  document.addEventListener("mousemove", mouseMoveHandler, false);
+	
+	  var isMovingLeft = false;
+	  var isMovingRight = false;
 	
 	  function keyDownHandler(e) {
 	    e.preventDefault();
 	
 	    switch(e.keyCode) {
+	    case 13:
+	      status.restart();
+	        break;
 	    case 39:
 	      paddle.moveLeft();
 	        break;

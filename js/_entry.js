@@ -14,18 +14,19 @@ var ctx = canvas.getContext("2d");
 
 //set entities
 var paddle = new Paddle(canvas, ctx);
-var controller = new Controller(paddle, canvas);
 var balls = new Balls(canvas, ctx);
 var bricks = new Bricks(canvas, ctx);
 var status = new Status(canvas, ctx);
 var prizes = new Prizes(canvas, ctx);
+// var prize = new Prize(canvas, ctx);
+var controller = new Controller(status, paddle, canvas);
 var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
-var prize = new Prize(canvas, ctx);
 
 var checkGameover = function() {
   if(status.lives < 1){
-    alert("GAME OVER");
-    document.location.reload();
+    gameover();
+  }else{
+    play();
   }
 };
 
@@ -39,7 +40,14 @@ var play = function(){
   prizes.render();
   balls.render();
 
-  checkGameover();
 };
 
-setInterval(play, 15);
+var gameover = function() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = "48px serif";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Game Over", 10, 50);
+  ctx.fillText("Press [Enter] to start", 10, 100);
+};
+
+setInterval(checkGameover, 15);
