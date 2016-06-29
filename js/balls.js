@@ -28,6 +28,13 @@ Balls.prototype.accelerate = function () {
   });
 };
 
+
+Balls.prototype.reverse = function () {
+  this.list.forEach(function(ball){
+      ball.reverse();
+  });
+};
+
 Balls.prototype.reset = function () {
   this.list = [new Ball(this.canvas, this.ctx)];
 };

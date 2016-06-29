@@ -125,6 +125,13 @@
 	  });
 	};
 	
+	
+	Balls.prototype.reverse = function () {
+	  this.list.forEach(function(ball){
+	      ball.reverse();
+	  });
+	};
+	
 	Balls.prototype.reset = function () {
 	  this.list = [new Ball(this.canvas, this.ctx)];
 	};
@@ -206,6 +213,11 @@
 	
 	Ball.prototype.shiftHorizontal = function() {
 	  this.dx *= -1;
+	};
+	
+	Ball.prototype.reverse = function() {
+	  this.shiftVertical();
+	  this.shiftHorizontal();
 	};
 	
 	Ball.prototype.bounce = function() {
@@ -340,15 +352,11 @@
 	function Bricks(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	
-	  this.rows = 10;
+	  this.rows = 8;
 	  this.columns = 8;
 	  this.padding = 1;
 	  this.topMargin = 0;
-	  this.leftMargin = 20;
-	  // this.columns = 6;
-	  // this.padding = 10;
-	  // this.topMargin = 30;
-	  // this.leftMargin = 30;
+	  this.leftMargin = 35; 
 	  this.list = [];
 	
 	  for(i = 0; i < this.columns; i++) {
@@ -579,6 +587,9 @@
 	          case "fire":
 	            balls.accelerate();
 	          break;
+	          case "beer":
+	            balls.reverse();
+	          break;
 	        }
 	      }
 	      else if(prize.isOutOfBound()){
@@ -644,7 +655,8 @@
 	  "1up": "images/1up.png",
 	  "boo": "images/boo.gif",
 	  "inflate": "images/dig_dug.png",
-	  "fire": "images/fire.png"
+	  "fire": "images/fire.png",
+	  "beer": "images/beer.png"
 	};
 	
 	function Prize(canvas, ctx) {
@@ -665,13 +677,15 @@
 	  var rand = Math.random();
 	  if(rand>0.98){
 	    this.setType("1up");
-	  }else if(rand>0.92){
+	  }else if(rand>0.95){
 	    this.setType("fire");
-	  }else if(rand>0.75){
+	  }else if(rand>0.9){
+	    this.setType("beer");
+	  }else if(rand>0.85){
 	    this.setType("inflate");
-	  }else if(rand>0.5){
+	  }else if(rand>0.45){
 	    this.setType("cherry");
-	  }else if(rand>0.25){
+	  }else if(rand>0.10){
 	    this.setType("grow");
 	  }else{
 	    this.setType("poison");

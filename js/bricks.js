@@ -4,15 +4,11 @@ var Brick = require("./brick.js");
 function Bricks(canvas, ctx) {
   Entity.call(this, canvas, ctx);
 
-  this.rows = 10;
+  this.rows = 8;
   this.columns = 8;
   this.padding = 1;
   this.topMargin = 0;
-  this.leftMargin = 20;
-  // this.columns = 6;
-  // this.padding = 10;
-  // this.topMargin = 30;
-  // this.leftMargin = 30;
+  this.leftMargin = 35; 
   this.list = [];
 
   for(i = 0; i < this.columns; i++) {

@@ -103,6 +103,9 @@ CollisionDetection.prototype.checkPrizes = function() {
           case "fire":
             balls.accelerate();
           break;
+          case "beer":
+            balls.reverse();
+          break;
         }
       }
       else if(prize.isOutOfBound()){

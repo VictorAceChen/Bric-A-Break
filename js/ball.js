@@ -51,6 +51,11 @@ Ball.prototype.shiftHorizontal = function() {
   this.dx *= -1;
 };
 
+Ball.prototype.reverse = function() {
+  this.shiftVertical();
+  this.shiftHorizontal();
+};
+
 Ball.prototype.bounce = function() {
   // bounce off top or bottom
   if(
