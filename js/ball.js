@@ -51,6 +51,10 @@ Ball.prototype.shiftHorizontal = function() {
   this.dx *= -1;
 };
 
+Ball.prototype.goRight = function() {
+  this.dx = Math.abs(this.dx);
+};
+
 Ball.prototype.reverse = function() {
   this.shiftVertical();
   this.shiftHorizontal();

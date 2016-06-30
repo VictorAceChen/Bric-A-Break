@@ -36,7 +36,7 @@ Prize.prototype.roulette = function() {
     this.setType("beer");
   }else if(rand>0.67){
     this.setType("inflate");
-  }else if(rand>0.45){
+  }else if(rand>0.55){
     this.setType("question");
   }else if(rand>0.35){
     this.setType("cherry");

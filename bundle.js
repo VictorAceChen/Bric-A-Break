@@ -227,6 +227,10 @@
 	  this.dx *= -1;
 	};
 	
+	Ball.prototype.goRight = function() {
+	  this.dx = Math.abs(this.dx);
+	};
+	
 	Ball.prototype.reverse = function() {
 	  this.shiftVertical();
 	  this.shiftHorizontal();
@@ -604,12 +608,14 @@
 	    row.forEach(function(brick, index){
 	      var isHit = false;
 	      // ball hits by left/right
-	      if(isRectOverlap(brick, ball.getLeftEdge()) ||
-	        isRectOverlap(brick, ball.getRightEdge()) ) {
+	      if(isRectOverlap(brick, ball.getLeftEdge()) ) {
 	        ball.shiftHorizontal();
 	        isHit = true;
 	        // ball hits by top/bottom
-	      } else if (isRectOverlap(brick, ball.getTopEdge()) ||
+	      } else if ( isRectOverlap(brick, ball.getRightEdge()) ) {
+	        ball.shiftHorizontal();
+	        isHit = true;
+	      }else if (isRectOverlap(brick, ball.getTopEdge()) ||
 	        isRectOverlap(brick, ball.getBottomEdge()) ) {
 	        ball.shiftVertical();
 	        isHit = true;
@@ -678,7 +684,8 @@
 	  // var ballRect = ball.toRect();
 	  var paddle = this.paddle;
 	
-	      if(paddle.isHit(ball)) {
+	      if(this.isOverlap(paddle, ball.toRect())) {
+	      // if(paddle.isHit(ball)) {
 	        // if(this.isRectOverlap(ballRect, paddle.getLeftEdge())){
 	        //     ball.setVelocity(-6,-2);
 	        // }else if(this.isRectOverlap(ballRect, paddle.getLeftCenter())){
@@ -702,7 +709,7 @@
 	            ball.setVelocity(4,-4);
 	        }else if(ball.x < paddle.x + paddle.width){
 	            ball.setVelocity(6,-2);
-	        }
+	        }else{ ball.reverse();}
 	      }
 	};
 	
@@ -769,7 +776,7 @@
 	    this.setType("beer");
 	  }else if(rand>0.67){
 	    this.setType("inflate");
-	  }else if(rand>0.45){
+	  }else if(rand>0.55){
 	    this.setType("question");
 	  }else if(rand>0.35){
 	    this.setType("cherry");

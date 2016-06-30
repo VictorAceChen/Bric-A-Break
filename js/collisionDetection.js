@@ -48,12 +48,14 @@ CollisionDetection.prototype.checkBricks = function(ball) {
     row.forEach(function(brick, index){
       var isHit = false;
       // ball hits by left/right
-      if(isRectOverlap(brick, ball.getLeftEdge()) ||
-        isRectOverlap(brick, ball.getRightEdge()) ) {
+      if(isRectOverlap(brick, ball.getLeftEdge()) ) {
         ball.shiftHorizontal();
         isHit = true;
         // ball hits by top/bottom
-      } else if (isRectOverlap(brick, ball.getTopEdge()) ||
+      } else if ( isRectOverlap(brick, ball.getRightEdge()) ) {
+        ball.shiftHorizontal();
+        isHit = true;
+      }else if (isRectOverlap(brick, ball.getTopEdge()) ||
         isRectOverlap(brick, ball.getBottomEdge()) ) {
         ball.shiftVertical();
         isHit = true;
@@ -122,7 +124,8 @@ CollisionDetection.prototype.checkPaddle = function(ball) {
   // var ballRect = ball.toRect();
   var paddle = this.paddle;
 
-      if(paddle.isHit(ball)) {
+      if(this.isOverlap(paddle, ball.toRect())) {
+      // if(paddle.isHit(ball)) {
         // if(this.isRectOverlap(ballRect, paddle.getLeftEdge())){
         //     ball.setVelocity(-6,-2);
         // }else if(this.isRectOverlap(ballRect, paddle.getLeftCenter())){
@@ -146,7 +149,7 @@ CollisionDetection.prototype.checkPaddle = function(ball) {
             ball.setVelocity(4,-4);
         }else if(ball.x < paddle.x + paddle.width){
             ball.setVelocity(6,-2);
-        }
+        }else{ ball.reverse();}
       }
 };
 
