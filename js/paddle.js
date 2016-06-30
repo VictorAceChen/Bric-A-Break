@@ -8,6 +8,9 @@ function Paddle(canvas, ctx) {
   this.x = (canvas.width - this.width)/2;
   this.y = canvas.height - this.height - 20;
   this.color = "#FFFFFF";
+
+  this.isMovingLeft = false;
+  this.isMovingRight = false;
 }
 
 Paddle.prototype = new Entity();
@@ -31,6 +34,14 @@ Paddle.prototype.resetPosition = function(x) {
     this.x = (this.canvas.width - this.width)/2;
 };
 
+Paddle.prototype.move = function() {
+  if(this.isMovingLeft){
+    this.moveLeft();
+  }else if(this.isMovingRight){
+    this.moveRight();
+  }
+};
+
 Paddle.prototype.isHit = function(ball) {
   return ball.x > this.x &&
     ball.x < this.x + this.width &&
@@ -48,6 +59,8 @@ Paddle.prototype.render = function() {
   this.ctx.fillStyle = this.color;
   this.ctx.fill();
   this.ctx.closePath();
+
+  this.move();
 };
 
 Paddle.prototype.grow = function() {

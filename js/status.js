@@ -3,7 +3,7 @@ var Entity = require("./entity.js");
 function Status(canvas, ctx) {
   Entity.call(this, canvas, ctx);
   this.score = 0;
-  this.lives = 0;
+  this.lives = 3;
 }
 
 Status.prototype = new Entity();
@@ -26,7 +26,7 @@ Status.prototype.render = function() {
 };
 
 Status.prototype.restart = function() {
-  if(this.lives > 0) return; 
+  if(this.lives > 0) return;
   this.score = 0;
   this.lives = 3;
 };

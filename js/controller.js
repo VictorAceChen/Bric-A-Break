@@ -1,29 +1,46 @@
 function Controller(status, paddle,canvas) {
 
+  document.addEventListener("keyup", keyUpHandler, false);
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("mousemove", mouseMoveHandler, false);
-
-  var isMovingLeft = false;
-  var isMovingRight = false;
 
   function keyDownHandler(e) {
     e.preventDefault();
 
     switch(e.keyCode) {
     case 13:
-      status.restart();
+      document.location.reload();
         break;
     case 39:
-      paddle.moveLeft();
+      paddle.isMovingLeft = true;
         break;
     case 68:
-      paddle.moveLeft();
+      paddle.isMovingLeft = true;
         break;
     case 37:
-      paddle.moveRight();
+      paddle.isMovingRight = true;
         break;
     case 65:
-      paddle.moveRight();
+      paddle.isMovingRight = true;
+        break;
+    }
+  }
+
+  function keyUpHandler(e) {
+    e.preventDefault();
+
+    switch(e.keyCode) {
+    case 39:
+      paddle.isMovingLeft = false;
+        break;
+    case 68:
+      paddle.isMovingLeft = false;
+        break;
+    case 37:
+      paddle.isMovingRight = false;
+        break;
+    case 65:
+      paddle.isMovingRight = false;
         break;
         }
   }

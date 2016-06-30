@@ -19,6 +19,8 @@ var bricks = new Bricks(canvas, ctx);
 var status = new Status(canvas, ctx);
 var prizes = new Prizes(canvas, ctx);
 // var prize = new Prize(canvas, ctx);
+
+
 var controller = new Controller(status, paddle, canvas);
 var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
 
@@ -49,5 +51,7 @@ var gameover = function() {
   ctx.fillText("Game Over", 10, 50);
   ctx.fillText("Press [Enter] to start", 10, 100);
 };
+
+
 
 setInterval(checkGameover, 15);
