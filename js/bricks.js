@@ -7,8 +7,8 @@ function Bricks(canvas, ctx) {
   this.rows = 8;
   this.columns = 8;
   this.padding = 1;
-  this.topMargin = 0;
-  this.leftMargin = 35; 
+  this.topMargin = 40;
+  this.leftMargin = 35;
   this.list = [];
 
   for(i = 0; i < this.columns; i++) {
