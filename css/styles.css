@@ -29,12 +29,12 @@ a {
   font-size: 25px;
   padding: 15px;
   font-weight: bold;
-  color: blue;
+  color: #0095DD;
 }
 
 a:hover {
   color: white;
-  background-color: blue;
+  background-color: #0095DD;
 }
 
 /** {cursor: none;}*/
