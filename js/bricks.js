@@ -29,6 +29,12 @@ function Bricks(canvas, ctx) {
 Bricks.prototype = new Entity();
 Bricks.prototype.constructor = Bricks;
 
+Bricks.prototype.isEmpty = function () {
+    return this.list.every(function(arr){
+      return arr.length === 0;
+    });
+};
+
 Bricks.prototype.render = function () {
     this.list.forEach(function(row){
       row.forEach(function(brick){

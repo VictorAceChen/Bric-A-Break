@@ -19,7 +19,7 @@ var bricks = new Bricks(canvas, ctx);
 var status = new Status(canvas, ctx);
 var prizes = new Prizes(canvas, ctx);
 // var prize = new Prize(canvas, ctx);
-
+window.bricks= bricks;
 
 var controller = new Controller(status, paddle, canvas);
 var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
@@ -27,6 +27,8 @@ var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, s
 var checkGameover = function() {
   if(status.lives < 1){
     gameover();
+  }else if(bricks.isEmpty()){
+    winner();
   }else{
     play();
   }
@@ -50,6 +52,14 @@ var gameover = function() {
   ctx.fillStyle = "#0095DD";
   ctx.fillText("Game Over", 10, 50);
   ctx.fillText("Press [Enter] to start", 10, 100);
+};
+
+var winner = function() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = "48px serif";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Congratulations!", 10, 50);
+  ctx.fillText("Press [Enter] to start again", 10, 100);
 };
 
 

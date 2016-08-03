@@ -65,7 +65,7 @@
 	var status = new Status(canvas, ctx);
 	var prizes = new Prizes(canvas, ctx);
 	// var prize = new Prize(canvas, ctx);
-	
+	window.bricks= bricks;
 	
 	var controller = new Controller(status, paddle, canvas);
 	var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
@@ -73,6 +73,8 @@
 	var checkGameover = function() {
 	  if(status.lives < 1){
 	    gameover();
+	  }else if(bricks.isEmpty()){
+	    winner();
 	  }else{
 	    play();
 	  }
@@ -96,6 +98,14 @@
 	  ctx.fillStyle = "#0095DD";
 	  ctx.fillText("Game Over", 10, 50);
 	  ctx.fillText("Press [Enter] to start", 10, 100);
+	};
+	
+	var winner = function() {
+	  ctx.clearRect(0, 0, canvas.width, canvas.height);
+	  ctx.font = "48px serif";
+	  ctx.fillStyle = "#0095DD";
+	  ctx.fillText("Congratulations!", 10, 50);
+	  ctx.fillText("Press [Enter] to start again", 10, 100);
 	};
 	
 	
@@ -452,6 +462,12 @@
 	// inherit constructor
 	Bricks.prototype = new Entity();
 	Bricks.prototype.constructor = Bricks;
+	
+	Bricks.prototype.isEmpty = function () {
+	    return this.list.every(function(arr){
+	      return arr.length === 0;
+	    });
+	};
 	
 	Bricks.prototype.render = function () {
 	    this.list.forEach(function(row){
@@ -819,7 +835,7 @@
 	function Status(canvas, ctx) {
 	  Entity.call(this, canvas, ctx);
 	  this.score = 0;
-	  this.lives = 3;
+	  this.lives = 0;
 	}
 	
 	Status.prototype = new Entity();
@@ -865,7 +881,8 @@
 	
 	    switch(e.keyCode) {
 	    case 13:
-	      document.location.reload();
+	      // document.location.reload();
+	      status.restart();
 	        break;
 	    case 39:
 	      paddle.isMovingLeft = true;

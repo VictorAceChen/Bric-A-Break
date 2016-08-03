@@ -9,7 +9,8 @@ function Controller(status, paddle,canvas) {
 
     switch(e.keyCode) {
     case 13:
-      document.location.reload();
+      // document.location.reload();
+      status.restart();
         break;
     case 39:
       paddle.isMovingLeft = true;
