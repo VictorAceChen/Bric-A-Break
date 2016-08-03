@@ -17,4 +17,24 @@ canvas {
   margin-right: 45px;
 }
 
-* {cursor: none;}
+footer {
+  padding-right: 100px;
+}
+
+a {
+  /*position: absolute;*/
+  bottom: 0;
+  left: 0;
+  float: right;
+  font-size: 25px;
+  padding: 15px;
+  font-weight: bold;
+  color: blue;
+}
+
+a:hover {
+  color: white;
+  background-color: blue;
+}
+
+/** {cursor: none;}*/
