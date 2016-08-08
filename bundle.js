@@ -65,7 +65,7 @@
 	var status = new Status(canvas, ctx);
 	var prizes = new Prizes(canvas, ctx);
 	// var prize = new Prize(canvas, ctx);
-	window.bricks= bricks;
+	var start = false;
 	
 	var controller = new Controller(status, bricks, paddle, canvas);
 	var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
@@ -82,6 +82,7 @@
 	    prizes.reset();
 	    paddle.reset();
 	  }else{
+	    start = true;
 	    play();
 	  }
 	};
@@ -102,7 +103,7 @@
 	  ctx.clearRect(0, 0, canvas.width, canvas.height);
 	  ctx.font = "48px serif";
 	  ctx.fillStyle = "#0095DD";
-	  ctx.fillText("Game Over", 10, 50);
+	  if(start) ctx.fillText("Game Over", 10, 50);
 	  ctx.fillText("Press [Enter] to start", 10, 100);
 	};
 	
@@ -325,8 +326,6 @@
 	
 	Paddle.prototype.reset = function() {
 	  this.width= 120;
-	  this.x = (canvas.width - this.width)/2;
-	  this.y = canvas.height - this.height - 20;
 	};
 	
 	Paddle.prototype.moveLeft = function() {

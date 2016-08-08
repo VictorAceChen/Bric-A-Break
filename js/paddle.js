@@ -18,8 +18,6 @@ Paddle.prototype.constructor = Paddle;
 
 Paddle.prototype.reset = function() {
   this.width= 120;
-  this.x = (canvas.width - this.width)/2;
-  this.y = canvas.height - this.height - 20;
 };
 
 Paddle.prototype.moveLeft = function() {
