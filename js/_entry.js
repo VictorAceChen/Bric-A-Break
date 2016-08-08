@@ -21,14 +21,20 @@ var prizes = new Prizes(canvas, ctx);
 // var prize = new Prize(canvas, ctx);
 window.bricks= bricks;
 
-var controller = new Controller(status, paddle, canvas);
+var controller = new Controller(status, bricks, paddle, canvas);
 var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
 
 var checkGameover = function() {
   if(status.lives < 1){
     gameover();
+    balls.reset();
+    prizes.reset();
+    paddle.reset();
   }else if(bricks.isEmpty()){
     winner();
+    balls.reset();
+    prizes.reset();
+    paddle.reset();
   }else{
     play();
   }

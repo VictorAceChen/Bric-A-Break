@@ -16,6 +16,12 @@ function Paddle(canvas, ctx) {
 Paddle.prototype = new Entity();
 Paddle.prototype.constructor = Paddle;
 
+Paddle.prototype.reset = function() {
+  this.width= 120;
+  this.x = (canvas.width - this.width)/2;
+  this.y = canvas.height - this.height - 20;
+};
+
 Paddle.prototype.moveLeft = function() {
   if (this.x + this.width > this.canvas.width) return; //don't cross wall
   this.x += 10;

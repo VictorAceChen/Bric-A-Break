@@ -1,4 +1,4 @@
-function Controller(status, paddle,canvas) {
+function Controller(status, bricks, paddle,canvas) {
 
   document.addEventListener("keyup", keyUpHandler, false);
   document.addEventListener("keydown", keyDownHandler, false);
@@ -10,7 +10,10 @@ function Controller(status, paddle,canvas) {
     switch(e.keyCode) {
     case 13:
       // document.location.reload();
-      status.restart();
+      if(status.isOver() || bricks.isEmpty()){
+        status.restart();
+        bricks.restart();
+      }
         break;
     case 39:
       paddle.isMovingLeft = true;

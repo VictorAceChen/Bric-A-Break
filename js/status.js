@@ -31,4 +31,8 @@ Status.prototype.restart = function() {
   this.lives = 3;
 };
 
+Status.prototype.isOver = function() {
+  return this.lives === 0;
+};
+
 module.exports = Status;

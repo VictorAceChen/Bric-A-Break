@@ -67,14 +67,20 @@
 	// var prize = new Prize(canvas, ctx);
 	window.bricks= bricks;
 	
-	var controller = new Controller(status, paddle, canvas);
+	var controller = new Controller(status, bricks, paddle, canvas);
 	var collisionDetection = new CollisionDetection(balls, bricks, paddle, prizes, status, canvas);
 	
 	var checkGameover = function() {
 	  if(status.lives < 1){
 	    gameover();
+	    balls.reset();
+	    prizes.reset();
+	    paddle.reset();
 	  }else if(bricks.isEmpty()){
 	    winner();
+	    balls.reset();
+	    prizes.reset();
+	    paddle.reset();
 	  }else{
 	    play();
 	  }
@@ -317,6 +323,12 @@
 	Paddle.prototype = new Entity();
 	Paddle.prototype.constructor = Paddle;
 	
+	Paddle.prototype.reset = function() {
+	  this.width= 120;
+	  this.x = (canvas.width - this.width)/2;
+	  this.y = canvas.height - this.height - 20;
+	};
+	
 	Paddle.prototype.moveLeft = function() {
 	  if (this.x + this.width > this.canvas.width) return; //don't cross wall
 	  this.x += 10;
@@ -443,12 +455,22 @@
 	  this.padding = 1;
 	  this.topMargin = 40;
 	  this.leftMargin = 35;
+	  this.canvas = canvas;
+	  this.ctx = ctx;
+	  this.restart();
+	}
+	
+	// inherit constructor
+	Bricks.prototype = new Entity();
+	Bricks.prototype.constructor = Bricks;
+	
+	Bricks.prototype.restart = function () {
 	  this.list = [];
 	
 	  for(i = 0; i < this.columns; i++) {
 	      var row = [];
 	      for(j = 0; j < this.rows; j++) {
-	        var brick = new Brick(canvas, ctx);
+	        var brick = new Brick(this.canvas, this.ctx);
 	        var x = (i * (brick.width + this.padding)) + this.leftMargin;
 	        var y = (j*(brick.height + this.padding)) + this.topMargin;
 	        brick.setPosition(x,y);
@@ -457,11 +479,7 @@
 	      }
 	      this.list.push(row);
 	  }
-	}
-	
-	// inherit constructor
-	Bricks.prototype = new Entity();
-	Bricks.prototype.constructor = Bricks;
+	};
 	
 	Bricks.prototype.isEmpty = function () {
 	    return this.list.every(function(arr){
@@ -863,6 +881,10 @@
 	  this.lives = 3;
 	};
 	
+	Status.prototype.isOver = function() {
+	  return this.lives === 0;
+	};
+	
 	module.exports = Status;
 
 
@@ -870,7 +892,7 @@
 /* 10 */
 /***/ function(module, exports) {
 
-	function Controller(status, paddle,canvas) {
+	function Controller(status, bricks, paddle,canvas) {
 	
 	  document.addEventListener("keyup", keyUpHandler, false);
 	  document.addEventListener("keydown", keyDownHandler, false);
@@ -882,7 +904,10 @@
 	    switch(e.keyCode) {
 	    case 13:
 	      // document.location.reload();
-	      status.restart();
+	      if(status.isOver() || bricks.isEmpty()){
+	        status.restart();
+	        bricks.restart();
+	      }
 	        break;
 	    case 39:
 	      paddle.isMovingLeft = true;
@@ -944,10 +969,14 @@
 	Prizes.prototype = new Entity();
 	Prizes.prototype.constructor = Prizes;
 	
+	Prizes.prototype.reset = function () {
+	  this.list = [];
+	};
+	
 	Prizes.prototype.render = function () {
-	    this.list.forEach(function(prize){
-	        prize.render();
-	    });
+	  this.list.forEach(function(prize){
+	      prize.render();
+	  });
 	};
 	module.exports = Prizes;
 

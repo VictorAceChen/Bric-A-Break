@@ -10,9 +10,13 @@ function Prizes(canvas, ctx) {
 Prizes.prototype = new Entity();
 Prizes.prototype.constructor = Prizes;
 
+Prizes.prototype.reset = function () {
+  this.list = [];
+};
+
 Prizes.prototype.render = function () {
-    this.list.forEach(function(prize){
-        prize.render();
-    });
+  this.list.forEach(function(prize){
+      prize.render();
+  });
 };
 module.exports = Prizes;
